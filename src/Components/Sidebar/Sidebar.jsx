@@ -60,22 +60,22 @@ export default function Sidebar({ onSidebarItemClick }) {
     const location = useLocation();
     const navigate = useNavigate();
     useEffect(() => {
-      // Function to extract route name from pathname and set it to state
-      const handleRouteChange = () => {
-        const routeName = location.pathname.split('/').pop().replace(/-/g, ' ');
-        setCurrentRouteName(routeName.charAt(0).toUpperCase() + routeName.slice(1));
-      };
-  
-      // Call handleRouteChange initially and add listener for subsequent changes
-      handleRouteChange();
-      return () => {
-        // Clean up listener when component unmounts
-      };
+        // Function to extract route name from pathname and set it to state
+        const handleRouteChange = () => {
+            const routeName = location.pathname.split('/').pop().replace(/-/g, ' ');
+            setCurrentRouteName(routeName.charAt(0).toUpperCase() + routeName.slice(1));
+        };
+
+        // Call handleRouteChange initially and add listener for subsequent changes
+        handleRouteChange();
+        return () => {
+            // Clean up listener when component unmounts
+        };
     }, [location.pathname]);
     const handleItemClick = (itemName, route) => {
         // You can perform any actions here, such as navigating to a route or updating state
         console.log(`Clicked on ${itemName}, navigating to ${route}`);
-      };
+    };
     return (
         <Sheet
             className="Sidebar"
@@ -179,7 +179,7 @@ export default function Sidebar({ onSidebarItemClick }) {
                             <List sx={{ gap: 0.5 }}>
                                 <ListItem sx={{ mt: 0.5 }}>
 
-                                    <ListItemButton  onClick={() => navigate('/user')}>
+                                    <ListItemButton onClick={() => navigate('/user')}>
                                         User
                                     </ListItemButton>
 
@@ -305,6 +305,12 @@ export default function Sidebar({ onSidebarItemClick }) {
                     </ListItem>
                 </List>
 
+
+
+            </Box>
+
+            <Divider />
+            <Box sx={{ width:"100%"}}>
                 <List size="sm"
                     sx={{
                         gap: 1,
@@ -348,23 +354,26 @@ export default function Sidebar({ onSidebarItemClick }) {
                         </Toggler>
                     </ListItem>
                 </List>
+                <div className='flex mt-3  gap-1 items-center'>
 
-            </Box>
-            <Divider />
-            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                <Avatar
-                    variant="outlined"
-                    size="lg"
-                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
+                    <Avatar
+                        variant="outlined"
+                        size="sm"
+                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
 
-                />
-                <Box sx={{ minWidth: 0, flex: 1 }}>
-                    <Typography level="title-sm">Siriwat K.</Typography>
-                    <Typography level="body-xs">Id - 9834874</Typography>
-                    <Typography level="body-xs">Role - Super Admin</Typography>
-                </Box>
-                <IconButton size="sm" variant="plain" color="neutral">
-                    <LogoutRoundedIcon />
+                    />
+                    <Box sx={{ minWidth: 0, flex: 1 }}>
+                        <Typography level="title-sm" className="text-xs font-bold">Siriwat K.</Typography>
+                        <div className='flex gap-2  mt-1 '>
+
+                            <Typography level="body-xs" className="text-xs font-bold">Id - 9834874</Typography>
+                            <Typography level="body-xs" className="text-xs border px-1 bg-yellow-500 rounded-[3px] text-black font-bold">Super Admin</Typography>
+                        </div>
+                    </Box>
+
+                </div>
+                <IconButton size="sm" style={{width:"200px"}} className='flex gap-5 text-lg items-center mt-3 justify-between px-3 bg-gray-200 w-full' variant="plain" color="neutral">
+                  LogOut  <LogoutRoundedIcon />
                 </IconButton>
             </Box>
         </Sheet >
