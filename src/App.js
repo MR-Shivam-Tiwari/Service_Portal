@@ -34,6 +34,16 @@ import HubStock from './Components/DataComponents/Upload_Management/Hub_Stock/Hu
 import PendingComplaint from './Components/DataComponents/Upload_Management/Pending_Complaint/PendingComplaint';
 import PendingInstallation from './Components/DataComponents/Upload_Management/Pending_Installation/PendingInstallation';
 import ChangePassword from './Components/Profile/ChangePassword';
+import AdminCountry from './Components/DataComponents/Admin/AdminCountry';
+import AdminState from './Components/DataComponents/Admin/AdminState';
+import AdminCity from './Components/DataComponents/Admin/AdminCity';
+import AdminBranch from './Components/DataComponents/Admin/AdminBranch';
+import AdminUserType from './Components/DataComponents/Admin/AdminUserType';
+import AdminDepartment from './Components/DataComponents/Admin/AdminDepartment';
+import AdminProductGroup from './Components/DataComponents/Admin/AdminProductGroup';
+import AdminChecklist from './Components/DataComponents/Admin/AdminChecklist';
+import AdminPM_Master from './Components/DataComponents/Admin/AdminPM_Master';
+import AdminRoles from './Components/DataComponents/Admin/AdminRoles';
 export default function App() {
   return (
     <Router>
@@ -141,7 +151,7 @@ function AppContent() {
                 </Typography>
               </Breadcrumbs>
             </Box>
-            <Typography level="h2" component="h1">
+            <Typography sx={{textTransform:'capitalize'}} level="h2" component="h1">
               {currentRouteName}
             </Typography>
 
@@ -161,6 +171,17 @@ function AppContent() {
             <Route path="/complaint-create-close" element={<ComplaintCreateClose />} />
             <Route path="/complaint-update" element={<ComplaintUpdate />} />
             <Route path="/completed-installation" element={<CompletedInstallation />} />
+            <Route path="/admin-country" element={<AdminCountry />} />
+            <Route path="/admin-state" element={<AdminState />} />
+            <Route path="/admin-city" element={<AdminCity />} />
+            <Route path="/admin-branch" element={<AdminBranch />} />
+            <Route path="/admin-userType" element={<AdminUserType />} />
+            <Route path="/admin-roles" element={<AdminRoles />} />
+            <Route path="/admin-department" element={<AdminDepartment />} />
+            <Route path="/admin-user-type" element={<AdminUserType />} />
+            <Route path="/admin-product-group" element={<AdminProductGroup />} />
+            <Route path="/admin-checklist" element={<AdminChecklist />} />
+            <Route path="/admin-pm-master" element={<AdminPM_Master />} />
             <Route path="/new-customer" element={<NewCustomer />} />
             <Route path="/amc-contract" element={<AmcContract />} />
             <Route path="/customer" element={<Customer />} />
