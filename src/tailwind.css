@@ -6,7 +6,6 @@
 /* Customize scrollbar */
 ::-webkit-scrollbar {
     width: 6px;  /* Vertical scrollbar width */
-    height: 0px; /* Horizontal scrollbar height */
     border-radius: 0px;
   }
     
@@ -17,12 +16,12 @@
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #888; /* Color of the scrollbar handle */
+    background: #aaa9a9; /* Color of the scrollbar handle */
   }
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Color of the scrollbar handle on hover */
+    background: #a3a1a1; /* Color of the scrollbar handle on hover */
   }
   
   /* Horizontal scrollbar */
@@ -32,5 +31,5 @@
   
   /* Horizontal scrollbar on hover */
   ::-webkit-scrollbar-thumb:hover:horizontal {
-    background: #555; /* Color of the horizontal scrollbar handle on hover */
+    background: #a1a0a0; /* Color of the horizontal scrollbar handle on hover */
   }

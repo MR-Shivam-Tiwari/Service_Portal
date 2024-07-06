@@ -1,574 +1,272 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
-import { ColorPaletteProp } from '@mui/joy/styles';
-import Avatar from '@mui/joy/Avatar';
-import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import Chip from '@mui/joy/Chip';
-import Divider from '@mui/joy/Divider';
-import FormControl from '@mui/joy/FormControl';
-import FormLabel from '@mui/joy/FormLabel';
-import Link from '@mui/joy/Link';
-import Input from '@mui/joy/Input';
-import Modal from '@mui/joy/Modal';
-import ModalDialog from '@mui/joy/ModalDialog';
-import ModalClose from '@mui/joy/ModalClose';
-import Select from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
-import Table from '@mui/joy/Table';
-import Sheet from '@mui/joy/Sheet';
-import Checkbox from '@mui/joy/Checkbox';
-import IconButton, { iconButtonClasses } from '@mui/joy/IconButton';
-import Typography from '@mui/joy/Typography';
-import Menu from '@mui/joy/Menu';
-import MenuButton from '@mui/joy/MenuButton';
-import MenuItem from '@mui/joy/MenuItem';
-import Dropdown from '@mui/joy/Dropdown';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import SearchIcon from '@mui/icons-material/Search';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import BlockIcon from '@mui/icons-material/Block';
-import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
-const rows = [
-  {
-    employeeId: 'EMP-001',
-    firstName: 'Alice',
-    lastName: 'Smith',
-    email: 'alice.smith@email.com',
-    managerEmail: 'manager1@email.com',
-    mobileNumber: '1234567890',
-    department: 'Marketing',
-  },
-  {
-    employeeId: 'EMP-002',
-    firstName: 'Bob',
-    lastName: 'Johnson',
-    email: 'bob.johnson@email.com',
-    managerEmail: 'manager2@email.com',
-    mobileNumber: '9876543210',
-    department: 'Finance',
-  },
-  {
-    employeeId: 'EMP-003',
-    firstName: 'Charlie',
-    lastName: 'Brown',
-    email: 'charlie.brown@email.com',
-    managerEmail: 'manager3@email.com',
-    mobileNumber: '5555555555',
-    department: 'HR',
-  },
-  {
-    employeeId: 'EMP-004',
-    firstName: 'David',
-    lastName: 'Lee',
-    email: 'david.lee@email.com',
-    managerEmail: 'manager4@email.com',
-    mobileNumber: '7777777777',
-    department: 'IT',
-  },
-  {
-    employeeId: 'EMP-005',
-    firstName: 'Emma',
-    lastName: 'Wong',
-    email: 'emma.wong@email.com',
-    managerEmail: 'manager5@email.com',
-    mobileNumber: '9999999999',
-    department: 'Operations',
-  },
-  {
-    employeeId: 'EMP-006',
-    firstName: 'Frank',
-    lastName: 'Davis',
-    email: 'frank.davis@email.com',
-    managerEmail: 'manager6@email.com',
-    mobileNumber: '4444444444',
-    department: 'Sales',
-  },
-  {
-    employeeId: 'EMP-007',
-    firstName: 'Grace',
-    lastName: 'Martinez',
-    email: 'grace.martinez@email.com',
-    managerEmail: 'manager7@email.com',
-    mobileNumber: '1111111111',
-    department: 'Engineering',
-  },
-  {
-    employeeId: 'EMP-008',
-    firstName: 'Henry',
-    lastName: 'Garcia',
-    email: 'henry.garcia@email.com',
-    managerEmail: 'manager8@email.com',
-    mobileNumber: '2222222222',
-    department: 'Customer Service',
-  },
-  {
-    employeeId: 'EMP-009',
-    firstName: 'Isabella',
-    lastName: 'Lopez',
-    email: 'isabella.lopez@email.com',
-    managerEmail: 'manager9@email.com',
-    mobileNumber: '3333333333',
-    department: 'Research',
-  },
-  {
-    employeeId: 'EMP-010',
-    firstName: 'Jack',
-    lastName: 'Rodriguez',
-    email: 'jack.rodriguez@email.com',
-    managerEmail: 'manager10@email.com',
-    mobileNumber: '6666666666',
-    department: 'Legal',
-  },
-  {
-    employeeId: 'EMP-011',
-    firstName: 'Kate',
-    lastName: 'Hernandez',
-    email: 'kate.hernandez@email.com',
-    managerEmail: 'manager11@email.com',
-    mobileNumber: '1231231234',
-    department: 'Quality Assurance',
-  },
-  {
-    employeeId: 'EMP-012',
-    firstName: 'Leo',
-    lastName: 'Gonzalez',
-    email: 'leo.gonzalez@email.com',
-    managerEmail: 'manager12@email.com',
-    mobileNumber: '9879879876',
-    department: 'Design',
-  },
-  {
-    employeeId: 'EMP-013',
-    firstName: 'Mia',
-    lastName: 'Perez',
-    email: 'mia.perez@email.com',
-    managerEmail: 'manager13@email.com',
-    mobileNumber: '3213213210',
-    department: 'Production',
-  },
-  {
-    employeeId: 'EMP-014',
-    firstName: 'Noah',
-    lastName: 'Torres',
-    email: 'noah.torres@email.com',
-    managerEmail: 'manager14@email.com',
-    mobileNumber: '6546546540',
-    department: 'Training',
-  },
-  {
-    employeeId: 'EMP-015',
-    firstName: 'Olivia',
-    lastName: 'Flores',
-    email: 'olivia.flores@email.com',
-    managerEmail: 'manager15@email.com',
-    mobileNumber: '7897897890',
-    department: 'Administration',
-  },
-  {
-    employeeId: 'EMP-016',
-    firstName: 'Peter',
-    lastName: 'Ramirez',
-    email: 'peter.ramirez@email.com',
-    managerEmail: 'manager16@email.com',
-    mobileNumber: '4564564560',
-    department: 'Logistics',
-  },
-  {
-    employeeId: 'EMP-017',
-    firstName: 'Quinn',
-    lastName: 'Gomez',
-    email: 'quinn.gomez@email.com',
-    managerEmail: 'manager17@email.com',
-    mobileNumber: '9876541230',
-    department: 'Supply Chain',
-  },
-  {
-    employeeId: 'EMP-018',
-    firstName: 'Ryan',
-    lastName: 'Reyes',
-    email: 'ryan.reyes@email.com',
-    managerEmail: 'manager18@email.com',
-    mobileNumber: '1593574560',
-    department: 'Procurement',
-  },
-  {
-    employeeId: 'EMP-019',
-    firstName: 'Sophia',
-    lastName: 'Sanchez',
-    email: 'sophia.sanchez@email.com',
-    managerEmail: 'manager19@email.com',
-    mobileNumber: '7539514560',
-    department: 'Warehousing',
-  },
-  {
-    employeeId: 'EMP-020',
-    firstName: 'Thomas',
-    lastName: 'Smith',
-    email: 'thomas.smith@email.com',
-    managerEmail: 'manager20@email.com',
-    mobileNumber: '4561237890',
-    department: 'Distribution',
-  },
-];
+const UserData = () => {
+  const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const limit = 10;
+  const [showModal, setShowModal] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
 
+  useEffect(() => {
+    fetchUsers(page, limit);
+  }, [page, limit]);
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-const getComparator = (order, orderBy) => (
-  order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy)
-);
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
+  const fetchUsers = async (page, limit) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/collections/user?page=${page}&limit=${limit}`);
+      setUsers(response.data.users);
+      setTotalPages(response.data.totalPages);
+      setSelectedUsers(new Array(response.data.users.length).fill(false));
+    } catch (error) {
+      console.error('Error fetching users:', error);
     }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-function RowMenu() {
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
+
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+    setSelectedUsers(new Array(users.length).fill(!selectAll));
+  };
+
+  const handleSelectUser = (index) => {
+    const newSelectedUsers = [...selectedUsers];
+    newSelectedUsers[index] = !newSelectedUsers[index];
+    setSelectedUsers(newSelectedUsers);
+    setSelectAll(newSelectedUsers.every(Boolean));
+  };
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      await axios.delete(`http://localhost:5000/collections/user/${userId}`);
+      setUsers(users.filter(user => user._id !== userId));
+      setShowModal(false);
+      toast.success('User deleted successfully');
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Failed to delete user');
+    }
+  };
+
+  const toggleModal = (userId) => {
+    setUserIdToDelete(userId);
+    setShowModal(!showModal);
+  };
   return (
-    <Dropdown>
-      <MenuButton
-        slots={{ root: IconButton }}
-        slotProps={{ root: { variant: 'plain', color: 'neutral', size: 'sm' } }}
-      >
-        <MoreHorizRoundedIcon />
-      </MenuButton>
-      <Menu size="sm" sx={{ minWidth: 140 }}>
-        <MenuItem>Edit</MenuItem>
-        <MenuItem>Rename</MenuItem>
-        <MenuItem>Move</MenuItem>
-        <Divider />
-        <MenuItem color="danger">Delete</MenuItem>
-      </Menu>
-    </Dropdown>
-  );
-}
-
-function UserData() {
-  const [order, setOrder] = useState('desc');
-  const [selected, setSelected] = useState([]);
-  const [open, setOpen] = useState(false);
-  const renderFilters = () => (
-    <React.Fragment>
-      <FormControl size="sm">
-        <FormLabel>Status</FormLabel>
-        <Select
-          size="sm"
-          placeholder="Filter by status"
-          slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
-        >
-          <Option value="paid">Paid</Option>
-          <Option value="pending">Pending</Option>
-          <Option value="refunded">Refunded</Option>
-          <Option value="cancelled">Cancelled</Option>
-        </Select>
-      </FormControl>
-      <FormControl size="sm">
-        <FormLabel>Category</FormLabel>
-        <Select size="sm" placeholder="All">
-          <Option value="all">All</Option>
-          <Option value="refund">Refund</Option>
-          <Option value="purchase">Purchase</Option>
-          <Option value="debit">Debit</Option>
-        </Select>
-      </FormControl>
-      <FormControl size="sm">
-        <FormLabel>Customer</FormLabel>
-        <Select size="sm" placeholder="All">
-          <Option value="all">All</Option>
-          <Option value="olivia">Olivia Rhye</Option>
-          <Option value="steve">Steve Hampton</Option>
-          <Option value="ciaran">Ciaran Murray</Option>
-          <Option value="marina">Marina Macdonald</Option>
-          <Option value="charles">Charles Fulton</Option>
-          <Option value="jay">Jay Hoper</Option>
-        </Select>
-      </FormControl>
-    </React.Fragment>
-  );
-  return (
-    <React.Fragment>
-      <Sheet
-        className="SearchAndFilters-mobile"
-        sx={{
-          display: { xs: 'flex', sm: 'none' },
-          my: 1,
-          gap: 1,
-        }}
-      >
-        <Input
-          size="sm"
-          placeholder="Search"
-          startDecorator={<SearchIcon />}
-          sx={{ flexGrow: 1 }}
-        />
-        <IconButton
-          size="sm"
-          variant="outlined"
-          color="neutral"
-          onClick={() => setOpen(true)}
-        >
-          <FilterAltIcon />
-        </IconButton>
-        <Modal open={open} onClose={() => setOpen(false)}>
-          <ModalDialog aria-labelledby="filter-modal" layout="fullscreen">
-            <ModalClose />
-            <Typography id="filter-modal" level="h2">
-              Filters
-            </Typography>
-            <Divider sx={{ my: 2 }} />
-            <Sheet sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {renderFilters()}
-              <Button color="primary" onClick={() => setOpen(false)}>
-                Submit
-              </Button>
-            </Sheet>
-          </ModalDialog>
-        </Modal>
-      </Sheet>
-      <Box
-        className="SearchAndFilters-tabletUp"
-        sx={{
-          borderRadius: 'sm',
-          py: 2,
-          display: { xs: 'none', sm: 'flex' },
-          flexWrap: 'wrap',
-          gap: 1.5,
-          '& > *': {
-            minWidth: { xs: '120px', md: '160px' },
-          },
-        }}
-      >
-        <FormControl sx={{ flex: 1 }} size="sm">
-          <FormLabel>Search for order</FormLabel>
-          <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} />
-        </FormControl>
-        {renderFilters()}
-      </Box>
-      <Sheet
-        className="OrderTableContainer"
-        variant="outlined"
-        sx={{
-          // display: { xs: 'none', sm: 'initial' },
-          width: '100%',
-          borderRadius: 'sm',
-          flexShrink: 1,
-          overflow: 'auto',
-          minHeight: 0,
-        }}
-      >
-        <Table
-          aria-labelledby="tableTitle"
-          stickyHeader
-          hoverRow
-          sx={{
-            '--TableCell-headBackground': 'var(--joy-palette-background-level1)',
-            '--Table-headerUnderlineThickness': '1px',
-            '--TableRow-hoverBackground': 'var(--joy-palette-background-level1)',
-            '--TableCell-paddingY': '4px',
-            '--TableCell-paddingX': '8px',
-          }}
-        >
-          <thead>
-            <tr>
-              <th style={{ width: 48, textAlign: 'center', padding: '12px 6px' }}>
-                <Checkbox
-                  size="sm"
-                  indeterminate={
-                    selected.length > 0 && selected.length !== rows.length
-                  }
-                  checked={selected.length === rows.length}
-                  onChange={(event) => {
-                    setSelected(
-                      event.target.checked ? rows.map((row) => row.id) : [],
-                    );
-                  }}
-                  color={
-                    selected.length > 0 || selected.length === rows.length
-                      ? 'primary'
-                      : undefined
-                  }
-                  sx={{ verticalAlign: 'text-bottom' }}
-                />
-              </th>
-              <th style={{ width: 120, padding: '12px 6px' }}>
-                <Link
-                  underline="none"
-                  color="primary"
-                  component="button"
-                  onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}
-                  fontWeight="lg"
-                  endDecorator={<ArrowDropDownIcon />}
-                  sx={{
-                    '& svg': {
-                      transition: '0.2s',
-                      transform:
-                        order === 'desc' ? 'rotate(0deg)' : 'rotate(180deg)',
-                    },
-                  }}
-                >
-                  Employee ID
-                </Link>
-              </th>
-              <th style={{ width: 140, padding: '12px 6px' }}>First Name</th>
-              <th style={{ width: 140, padding: '12px 6px' }}>Last name</th>
-              <th style={{ width: 240, padding: '12px 6px' }}>Department</th>
-              <th style={{ width: 140, padding: '12px 6px' }}> Manager Email </th>
-              <th style={{ width: 140, padding: '12px 6px' }}> Mobile Number </th>
-              <th style={{ width: 140, padding: '12px 6px' }}> Email </th>
-            </tr>
-          </thead>
-          <tbody>
-            {stableSort(rows, getComparator(order, 'id')).map((row) => (
-              <tr key={row.employeeId}>
-                <td style={{ textAlign: 'center', width: 120 }}>
-                  <Checkbox
-                    size="sm"
-                    checked={selected.includes(row.employeeId)}
-                    color={selected.includes(row.employeeId) ? 'primary' : undefined}
-                    onChange={(event) => {
-                      setSelected((ids) =>
-                        event.target.checked
-                          ? ids.concat(row.employeeId)
-                          : ids.filter((itemId) => itemId !== row.employeeId),
-                      );
-                    }}
-                    slotProps={{ checkbox: { sx: { textAlign: 'left' } } }}
-                    sx={{ verticalAlign: 'text-bottom' }}
-                  />
-                </td>
-                <td>
-                  <Typography level="body-xs">{row.employeeId}</Typography>
-                </td>
-                <td>
-                  <Typography level="body-xs">{row.firstName}</Typography>
-                </td>
-                <td>
-                  <Typography level="body-xs">{row.lastName}</Typography>
-                </td>
-                <td>
-                  <Chip
-                    variant="soft"
-                    size="sm"
-                    startDecorator={
-                      {
-                        Paid: <CheckRoundedIcon />,
-                        Refunded: <AutorenewRoundedIcon />,
-                        Cancelled: <BlockIcon />,
-                      }[row.status]
-                    }
-                    color={
-                      {
-                        Paid: 'success',
-                        Refunded: 'neutral',
-                        Cancelled: 'danger',
-                      }[row.status] || 'primary'
-                    }
-
-
-
-                  >
-                    {row.department}
-                  </Chip>
-                </td>
-                <td>
-                  <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    {/* <Avatar size="sm">{row.customer.initial}</Avatar> */}
-                    <div>
-                      <Typography level="body-xs">{row.email}</Typography>
-                    </div>
-                  </Box>
-                </td>
-                <td>
-                  <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    
-                    <div>
-                    <Typography level="body-xs">{row.mobileNumber}</Typography>
-
-                    </div>
-                  </Box>
-                </td>
-                <td>
-                  <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    
-                    <div>
-                    <Typography level="body-xs">{row.email}</Typography>
-
-                    </div>
-                  </Box>
-                </td>
-
+    <div className="border bg-card text-card-foreground shadow-sm  w-full">
+      <div className="">
+        <div className="relative w-full overflow-x-auto">
+          <table className="w-full min-w-max caption-bottom text-sm">
+            <thead className="[&amp;_tr]:border-b bg-blue-700">
+              <tr className="border-b transition-colors text-white hover:bg-muted/50 data-[state=selected]:bg-muted">
+                <th scope="col" className="p-4">
+                  <div className="flex items-center">
+                    <input
+                      id="checkbox-all-search"
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                      checked={selectAll}
+                      onChange={handleSelectAll}
+                    />
+                    <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
+                  </div>
+                </th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Employee ID</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">First Name</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Last Name</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Email</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Mobile</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Branch</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Login Expiry Date</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Country</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">State/Region</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">City</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Created At</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Updated At</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Department</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Password</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Skills</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Device ID</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Manager Email</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Device Registered Date</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Sheet>
-      <Box
-        className="Pagination-laptopUp"
-        sx={{
-          pt: 2,
-          gap: 1,
-          [`& .${iconButtonClasses.root}`]: { borderRadius: '50%' },
-          display: {
-            xs: 'none',
-            md: 'flex',
-          },
-        }}
-      >
-        <Button
-          size="sm"
-          variant="outlined"
-          color="neutral"
-          startDecorator={<KeyboardArrowLeftIcon />}
+            </thead>
+            <tbody className="[&amp;_tr:last-child]:border-0  ">
+              {users.map((user, index) => (
+                <tr key={user._id} className="border-b transition-colors  data-[state=selected]:bg-muted">
+                  <th scope="col" className="p-4">
+                    <div className="flex items-center">
+                      <input
+                        id={`checkbox-${index}`}
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                        checked={selectedUsers[index]}
+                        onChange={() => handleSelectUser(index)}
+                      />
+                      <label htmlFor={`checkbox-${index}`} className="sr-only">checkbox</label>
+                    </div>
+                  </th>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.employeeid}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.firstname}</td> 
+                  <td className="p-4 align-middle whitespace-nowrap">{user.lastname}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.email}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.mobilenumber}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.branch}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.loginexpirydate)}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.status}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.country}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.state}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.city}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.createdAt)}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.modifiedAt)}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.department}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.password}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.skills}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.deviceid}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.manageremail}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.deviceregistereddate)}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">
+                    <div className='flex gap-4 '>
+                      <buton className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                      </svg></buton>
+                      <button onClick={() => toggleModal(user._id)} className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash3-fill" viewBox="0 0 16 16">
+                          <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {showModal && (
+          <div
+            id="default-modal"
+            tabIndex="-1"
+            aria-hidden="true"
+            className="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+          >
+            <div className="relative p-4 w-full w-[400px]">
+              <div className="relative bg-white rounded-lg shadow ">
+                <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
+                  <div>
+                    <h1 class="text-3xl font-bold text-gray-900 ">
+                      Delete User
+                    </h1>
+
+                  </div>
+                  <button
+                    type="button"
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center "
+                    onClick={() => setShowModal(false)}
+                  >
+                    <svg
+                      className="w-3 h-3"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 14"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7l-6 6"
+                      />
+                    </svg>
+                    <span className="sr-only">Close modal</span>
+                  </button>
+                </div>
+                <div class="w-full  mx-auto py-5 px-4 sm:px-6 lg:px-8 overflow-y-auto  sm:max-h-screen">
+                  <div class="space-y-6">
+
+
+                    <div className='text-center font-bold'>
+                      Are You Sure You Want Delete?
+                    </div>
+                    <div className='flex gap-11 justify-center'>
+
+                      <div onClick={() => setShowModal(false)} class="flex justify-end">
+                        <button
+
+                          class="inline-flex justify-center py-2 px-4 border  shadow-sm text-sm font-medium rounded-md text-black   focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      <div class="">
+                        <button
+                          onClick={() => handleDeleteUser(userIdToDelete)}
+                          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="Pagination-laptopUp" style={{ display: 'flex', justifyContent: 'space-between', padding: '16px' }}>
+        <button
+          className='border rounded p-1 cursor-pointer hover:bg-gray-300 px-2 bg-gray-100 font-semibold'
+          onClick={handlePreviousPage}
+          disabled={page === 1}
         >
           Previous
-        </Button>
-
-        <Box sx={{ flex: 1 }} />
-        {['1', '2', '3', '…', '8', '9', '10'].map((page) => (
-          <IconButton
-            key={page}
-            size="sm"
-            variant={Number(page) ? 'outlined' : 'plain'}
-            color="neutral"
-          >
-            {page}
-          </IconButton>
-        ))}
-        <Box sx={{ flex: 1 }} />
-
-        <Button
-          size="sm"
-          variant="outlined"
-          color="neutral"
-          endDecorator={<KeyboardArrowRightIcon />}
+        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map(p => (
+            <button
+              className={`border px-3 rounded ${p === page ? 'bg-blue-700 text-white' : ''}`}
+              key={p}
+              onClick={() => setPage(p)}
+              disabled={p === page}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+        <button
+          className='border rounded p-1 cursor-pointer hover:bg-gray-300 px-2 bg-gray-100 font-semibold'
+          onClick={handleNextPage}
+          disabled={page === totalPages}
         >
           Next
-        </Button>
-      </Box>
-    </React.Fragment>
+        </button>
+      </div>
+    </div>
   );
-}
+};
 
-export default UserData
+export default UserData;
