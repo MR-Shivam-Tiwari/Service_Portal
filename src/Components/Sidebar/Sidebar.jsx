@@ -303,6 +303,64 @@ export default function Sidebar({ onSidebarItemClick }) {
                             </List>
                         </Toggler>
                     </ListItem>
+                    <ListItem nested>
+                        <Toggler
+                            renderToggle={({ open, setOpen }) => (
+                                <ListItemButton onClick={() => setOpen(!open)}>
+
+
+
+                                    <SummarizeIcon />
+                                    <ListItemContent>
+                                        <Typography level="title-sm">Admin</Typography>
+                                    </ListItemContent>
+
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" className="bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
+                                    </svg>
+                                </ListItemButton>
+
+                            )}
+                        >
+                            <List sx={{ gap: 0.5 }}>
+                                <ListItem sx={{ mt: 0.5 }}>
+                                    <ListItemButton
+                                        onClick={() => navigate('/admin-country')}
+                                    >
+                                        Country
+                                    </ListItemButton>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemButton onClick={() => navigate('/admin-state')}>State/Region</ListItemButton>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemButton onClick={() => navigate('/admin-city')}>City</ListItemButton>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemButton onClick={() => navigate('/admin-branch')}>Branch</ListItemButton>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemButton onClick={() => navigate('/admin-roles')}>Roles</ListItemButton>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemButton onClick={() => navigate('/admin-user-type')}>User Type</ListItemButton>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemButton onClick={() => navigate('/admin-department')}>Department</ListItemButton>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemButton onClick={() => navigate('/admin-product-group')}>Product Group</ListItemButton>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemButton onClick={() => navigate('/admin-checklist')}>Checklist</ListItemButton>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemButton onClick={() => navigate('/admin-pm-master')}>PM Master</ListItemButton>
+                                </ListItem>
+                            </List>
+                        </Toggler>
+                    </ListItem>
                 </List>
 
 
