@@ -412,7 +412,7 @@ export default function Sidebar({ onSidebarItemClick }) {
                         </Toggler>
                     </ListItem>
                 </List>
-                <div className='flex my-3  gap-1 items-center border rounded pl-1 bg-gray-200 py-1'>
+                <div className='flex my-3  gap-1 items-center  rounded pl-1  py-1'>
 
                     <Avatar
                         variant="outlined"
@@ -430,7 +430,7 @@ export default function Sidebar({ onSidebarItemClick }) {
                     </Box>
 
                 </div>
-                <IconButton size="sm" style={{}} className='flex gap-5 text-lg items-center mt-5 justify-between px-3 bg-gray-200 w-full' variant="plain" color="neutral">
+                <IconButton size="sm" style={{}} className='flex gap-5 mb-3 text-lg items-center mt-5 justify-between px-3 bg-gray-200 w-full' variant="plain" color="neutral">
                   LogOut  <LogoutRoundedIcon />
                 </IconButton>
             </Box>
