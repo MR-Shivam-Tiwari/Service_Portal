@@ -128,7 +128,7 @@ const UserData = () => {
                     </div>
                   </th>
                   <td className="p-4 align-middle whitespace-nowrap">{user.employeeid}</td>
-                  <td className="p-4 align-middle whitespace-nowrap">{user.firstname}</td>
+                  <td className="p-4 align-middle whitespace-nowrap">{user.firstname}</td> 
                   <td className="p-4 align-middle whitespace-nowrap">{user.lastname}</td>
                   <td className="p-4 align-middle whitespace-nowrap">{user.email}</td>
                   <td className="p-4 align-middle whitespace-nowrap">{user.mobilenumber}</td>
