@@ -30,7 +30,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BrightnessAutoRoundedIcon from '@mui/icons-material/BrightnessAutoRounded';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SummarizeIcon from '@mui/icons-material/Summarize';
-import ColorSchemeToggle from '../ColorToggle/ColorSchemeToggle';
+// import ColorSchemeToggle from '../ColorToggle/ColorSchemeToggle';
 import { closeSidebar } from './utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -90,7 +90,7 @@ export default function Sidebar({ onSidebarItemClick }) {
                 height: '100dvh',
                 width: 'var(--Sidebar-width)',
                 top: 0,
-                p: 2,
+                p: 1,
                 flexShrink: 0,
                 display: 'flex',
                 flexDirection: 'column',
@@ -131,7 +131,7 @@ export default function Sidebar({ onSidebarItemClick }) {
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                 <img style={{ width: "40px", height: "40px", borderRadius: "5px" }} src="https://img.freepik.com/free-vector/blond-man-with-eyeglasses-icon-isolated_24911-100831.jpg?t=st=1713514458~exp=1713518058~hmac=9d7688b59aa4ecb9a54415ce7ef5de909bbbf715fb73346df0d52abf0b08c603&w=740" alt="" />
                 <Typography level="title-lg">Service Portal</Typography>
-                <ColorSchemeToggle sx={{ ml: 'auto' }} />
+                {/* <ColorSchemeToggle sx={{ ml: 'auto' }} /> */}
             </Box>
             <Input size="sm" startDecorator={<SearchRoundedIcon />} placeholder="Search" />
             <Box
@@ -412,7 +412,7 @@ export default function Sidebar({ onSidebarItemClick }) {
                         </Toggler>
                     </ListItem>
                 </List>
-                <div className='flex mt-3  gap-1 items-center'>
+                <div className='flex my-3  gap-1 items-center border rounded pl-1 bg-gray-200 py-1'>
 
                     <Avatar
                         variant="outlined"
@@ -430,7 +430,7 @@ export default function Sidebar({ onSidebarItemClick }) {
                     </Box>
 
                 </div>
-                <IconButton size="sm" style={{width:"200px"}} className='flex gap-5 text-lg items-center mt-3 justify-between px-3 bg-gray-200 w-full' variant="plain" color="neutral">
+                <IconButton size="sm" style={{}} className='flex gap-5 text-lg items-center mt-5 justify-between px-3 bg-gray-200 w-full' variant="plain" color="neutral">
                   LogOut  <LogoutRoundedIcon />
                 </IconButton>
             </Box>

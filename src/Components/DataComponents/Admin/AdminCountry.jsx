@@ -161,7 +161,7 @@ const AdminCountry = () => {
         <FormLabel>Customer</FormLabel>
         <Button color='primary' onClick={handleCloseCountryModal}> Create Country</Button>
       </FormControl>
-      <Modal open={createCountry} onClose={() => setCreateCountry()}>
+      <Modal open={createCountry} onClose={() => setCreateCountry()} className="z-20">
       <ModalDialog aria-labelledby="filter-modal" layout="fullscreen">
         <ModalClose />
         <Typography id="filter-modal" level="h2">
