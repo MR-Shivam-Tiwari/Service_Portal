@@ -52,9 +52,9 @@ function Toggler({ defaultExpanded = false, renderToggle, children }) {
                 {children}
             </Box>
         </React.Fragment>
-    );
+    ); 
 }
-
+ 
 export default function Sidebar({ onSidebarItemClick }) {
     const [currentRouteName, setCurrentRouteName] = useState('');
     const location = useLocation();
