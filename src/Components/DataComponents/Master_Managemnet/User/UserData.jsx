@@ -13,7 +13,7 @@ const UserData = () => {
   const [userIdToDelete, setUserIdToDelete] = useState(null);
 
   useEffect(() => {
-    fetchUsers(page, limit);
+    // fetchUsers(page, limit);
   }, [page, limit]);
 
   const fetchUsers = async (page, limit) => {

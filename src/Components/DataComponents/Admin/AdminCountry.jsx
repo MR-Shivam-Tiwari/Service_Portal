@@ -80,6 +80,30 @@ const AdminCountry = () => {
   const [countrys, setCountries] = useState([]);
   const [currentCountry, setCurrentCountry] = useState({});
 
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+    if (!selectAll) {
+      // Select all rows
+      setSelectedRows(countrys.map((country) => country._id));
+    } else {
+      // Deselect all rows
+      setSelectedRows([]);
+    }
+  };
+
+  const handleRowSelect = (countryId) => {
+    if (selectedRows.includes(countryId)) {
+      // Deselect the row
+      setSelectedRows(selectedRows.filter((id) => id !== countryId));
+    } else {
+      // Select the row
+      setSelectedRows([...selectedRows, countryId]);
+    }
+  };
+
   const handleCloseCountryModal = () => {
     setShowModal(prev => !prev);
     setEditModal(false)
@@ -177,7 +201,11 @@ const AdminCountry = () => {
         <button onClick={handleCloseCountryModal} type="button" className="text-white col-span-2 md:col-span-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2">Create Country</button>
 
       </div>
-
+      {
+        selectedRows?.length >0 && <div className='flex justify-center'>
+          <button type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 :focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Delete Selected</button>
+        </div>
+      }
       <div className="relative w-full overflow-x-auto">
 
         <table className="w-full  min-w-max caption-bottom text-sm">
@@ -189,8 +217,8 @@ const AdminCountry = () => {
                     id="checkbox-all-search"
                     type="checkbox"
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
-                  // checked={selectAll}
-                  // onChange={handleSelectAll}
+                    checked={selectAll}
+                    onChange={handleSelectAll}
                   />
                   <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
                 </div>
@@ -205,18 +233,21 @@ const AdminCountry = () => {
           </thead>
           <tbody className="[&amp;_tr:last-child]:border-0  ">
             {countrys?.map((country, index) => (
-              <tr key={country._id} className="border-b transition-colors  data-[state=selected]:bg-muted">
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    <input
-                      id={`checkbox-${index}`}
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
-
-                    />
-                    <label htmlFor={`checkbox-${index}`} className="sr-only">checkbox</label>
-                  </div>
-                </th>
+              <tr key={country?._id} className="border-b transition-colors  data-[state=selected]:bg-muted">
+               <th scope="col" className="p-4">
+                <div className="flex items-center">
+                  <input
+                    id={`checkbox-${index}`}
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                    checked={selectedRows.includes(country?._id)}
+                    onChange={() => handleRowSelect(country?._id)}
+                  />
+                  <label htmlFor={`checkbox-${index}`} className="sr-only">
+                    checkbox
+                  </label>
+                </div>
+              </th>
                 <td className="p-4 font-bold text-md capitalize align-middle whitespace-nowrap">{country?.name}</td>
                 <td>
                   <span
