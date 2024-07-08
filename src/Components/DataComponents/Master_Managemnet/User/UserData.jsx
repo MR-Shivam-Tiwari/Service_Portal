@@ -36,7 +36,7 @@ const UserData = () => {
     };
   }, []);
   useEffect(() => {
-    // fetchUsers(page, limit);
+    fetchUsers(page, limit);
   }, [page, limit]);
 
   const fetchUsers = async (page, limit) => {

@@ -30,6 +30,32 @@ const AdminState = () => {
   const [data, setData] = useState([]);
   const [currentData, setCurrentData] = useState({});
   const [countrys, setCountries] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [selectAll, setSelectAll] = useState(false);
+  const limit = 10;
+
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+    if (!selectAll) {
+      // Select all rows
+      setSelectedRows(data?.map((country) => country._id));
+    } else {
+      // Deselect all rows
+      setSelectedRows([]);
+    }
+  };
+  const handleRowSelect = (countryId) => {
+    if (selectedRows.includes(countryId)) {
+      // Deselect the row
+      setSelectedRows(selectedRows.filter((id) => id !== countryId));
+    } else {
+      // Select the row
+      setSelectedRows([...selectedRows, countryId]);
+    }
+  };
 
   const handleCloseModal = () => {
     setShowModal(prev => !prev);
@@ -80,20 +106,25 @@ const AdminState = () => {
   const getAllCountries = ()=>{
     axios.get(`${process.env.REACT_APP_BASE_URL}/collections/country`)
     .then((res) => {
-      setCountries(res.data)
+      setCountries(res.data.countries)
     }).catch((error) => { console.log(error) })
   }
 
   const getAllData = () => {
-    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/state`)
+    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/state?page=${page}&limit=${limit}`)
       .then((res) => {
-        setData(res.data)
+        setData(res.data.states)
+        setTotalPages(res.data.totalPages)
       }).catch((error) => { console.log(error) })
   }
   useEffect(() => {
     getAllData()
     getAllCountries()
   }, [])
+  useEffect(() => {
+    getAllData()
+    getAllCountries()
+  }, [page])
 
   const handleSubmit = (id) => {
     if (editModal && id) {
@@ -117,6 +148,13 @@ const AdminState = () => {
         getAllData()
       }).catch((error) => { console.log(error) })
   }
+  const handlePreviousPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
 
 
   return (
@@ -144,12 +182,12 @@ const AdminState = () => {
             <th scope="col" className="p-4">
               <div className="flex items-center">
                 <input
-                  id="checkbox-all-search"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
-                // checked={selectAll}
-                // onChange={handleSelectAll}
-                />
+                    id="checkbox-all-search"
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                    checked={selectAll}
+                    onChange={handleSelectAll}
+                  />
                 <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
               </div>
             </th>
@@ -163,60 +201,87 @@ const AdminState = () => {
           </tr>
         </thead>
         <tbody className="[&amp;_tr:last-child]:border-0  ">
-          {data?.map((country, index) => (
-            <tr key={country._id} className="border-b transition-colors  data-[state=selected]:bg-muted">
+          {data?.map((i, index) => (
+            <tr key={i._id} className="border-b transition-colors  data-[state=selected]:bg-muted">
               <th scope="col" className="p-4">
                 <div className="flex items-center">
-                  <input
+                <input
                     id={`checkbox-${index}`}
                     type="checkbox"
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
-
+                    checked={selectedRows?.includes(i?._id)}
+                    onChange={() => handleRowSelect(i?._id)}
                   />
                   <label htmlFor={`checkbox-${index}`} className="sr-only">checkbox</label>
                 </div>
               </th>
-              <td className="p-4 font-bold text-md capitalize align-middle whitespace-nowrap">{country?.name}</td>
-              <td className="p-4  text-md capitalize align-middle whitespace-nowrap">{country?.country}</td>
+              <td className="p-4 font-bold text-md capitalize align-middle whitespace-nowrap">{i?.name}</td>
+              <td className="p-4  text-md capitalize align-middle whitespace-nowrap">{i?.country}</td>
               <td>
                 <span
-                  className={`text-xs font-medium px-2.5 py-0.5 rounded border ${country?.status === "Active"
+                  className={`text-xs font-medium px-2.5 py-0.5 rounded border ${i?.status === "Active"
                     ? "bg-green-100 text-green-800 border-green-400"
-                    : country?.status === "Inactive"
+                    : i?.status === "Inactive"
                       ? "bg-red-100 text-red-800  border-red-400"
                       : "bg-orange-100 text-orange-800  border-orange-400"
                     }`}
                 >
-                  {country?.status}
+                  {i?.status}
                 </span>
               </td>
-              <td className="p-4 align-middle whitespace-nowrap">{moment(country?.createdAt).format('MMMM D, YYYY')}</td>
-              <td className="p-4 align-middle whitespace-nowrap">{moment(country?.modifiedAt).format('MMMM D, YYYY')}</td>
+              <td className="p-4 align-middle whitespace-nowrap">{moment(i?.createdAt).format('MMMM D, YYYY')}</td>
+              <td className="p-4 align-middle whitespace-nowrap">{moment(i?.modifiedAt).format('MMMM D, YYYY')}</td>
 
-              <td className="p-4 align-middle whitespace-nowrap " >
-                {/* <Dropdown className="p-1  text-center">
-                <MenuButton className="p-1 ml-2 text-center"><MoreVert/></MenuButton>
-                <Menu>
-                  <MenuItem>Add item</MenuItem>
-                </Menu>
-              </Dropdown> */}
-
-                <div className="flex flex-row items-center">
-                  <IconButton onClick={() => { handleOpenModal(country) }} >
-                    <EditIcon color='success' />
-                  </IconButton>
-                  <IconButton onClick={() => handleDelete(country?._id)}>
-                    <DeleteIcon color='danger' />
-                  </IconButton>
-                </div>
-
-              </td>
+             
+              <td className="p-4 align-middle whitespace-nowrap">
+                        <div className='flex gap-4 '>
+                          <button onClick={() => { handleOpenModal(i) }} className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                              <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                            </svg>
+                          </button>
+                          <button onClick={() => handleDelete(i?._id)} className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash3-fill" viewBox="0 0 16 16">
+                              <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
 
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+    <div className="Pagination-laptopUp" style={{ display: 'flex', justifyContent: 'space-between', padding: '16px' }}>
+          <button
+            className='border rounded p-1 cursor-pointer w-[100px] hover:bg-gray-300 px-2 bg-gray-100 font-semibold'
+            onClick={handlePreviousPage}
+            disabled={page === 1}
+          >
+            Previous
+          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map(p => (
+              <button
+                className={`border px-3 rounded ${p === page ? 'bg-blue-700 text-white' : ''}`}
+                key={p}
+                onClick={() => setPage(p)}
+                disabled={p === page}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+          <button
+            className='border rounded p-1 cursor-pointer hover:bg-blue-500 px-2 bg-blue-700 w-[100px] text-white font-semibold'
+            onClick={handleNextPage}
+            disabled={page === totalPages}
+          >
+            Next
+          </button>
+        </div>
 
     <Modal
       open={showModal}
