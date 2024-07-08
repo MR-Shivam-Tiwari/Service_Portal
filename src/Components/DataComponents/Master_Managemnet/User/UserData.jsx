@@ -170,9 +170,9 @@ const UserData = () => {
             id="default-modal"
             tabIndex="-1"
             aria-hidden="true"
-            className="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+            className="fixed inset-0 z-50 flex items-center justify-center w-[full] h-full bg-black bg-opacity-50"
           >
-            <div className="relative p-4 w-full w-[400px]">
+            <div className="relative p-4  w-[400px]">
               <div className="relative bg-white rounded-lg shadow ">
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
                   <div>
