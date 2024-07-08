@@ -73,6 +73,7 @@ const UserData = () => {
   };
   return (
     <div className="border bg-card text-card-foreground shadow-sm  w-full">
+      <Toaster position="top-right" reverseOrder={false} />
       <div className="">
         <div className="relative w-full overflow-x-auto">
           <table className="w-full min-w-max caption-bottom text-sm">
@@ -128,7 +129,7 @@ const UserData = () => {
                     </div>
                   </th>
                   <td className="p-4 align-middle whitespace-nowrap">{user.employeeid}</td>
-                  <td className="p-4 align-middle whitespace-nowrap">{user.firstname}</td> 
+                  <td className="p-4 align-middle whitespace-nowrap">{user.firstname}</td>
                   <td className="p-4 align-middle whitespace-nowrap">{user.lastname}</td>
                   <td className="p-4 align-middle whitespace-nowrap">{user.email}</td>
                   <td className="p-4 align-middle whitespace-nowrap">{user.mobilenumber}</td>
@@ -169,9 +170,9 @@ const UserData = () => {
             id="default-modal"
             tabIndex="-1"
             aria-hidden="true"
-            className="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+            className="fixed inset-0 z-50 flex items-center justify-center w-[full] h-full bg-black bg-opacity-50"
           >
-            <div className="relative p-4 w-full w-[400px]">
+            <div className="relative p-4  w-[400px]">
               <div className="relative bg-white rounded-lg shadow ">
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
                   <div>
@@ -179,7 +180,7 @@ const UserData = () => {
                       Delete User
                     </h1>
 
-                  </div>
+                  </div> 
                   <button
                     type="button"
                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center "
