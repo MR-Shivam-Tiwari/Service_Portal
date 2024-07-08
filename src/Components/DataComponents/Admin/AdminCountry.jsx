@@ -74,12 +74,12 @@ const rows = [
 
 const AdminCountry = () => {
 
-
+  const [page, setPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [countrys, setCountries] = useState([]);
   const [currentCountry, setCurrentCountry] = useState({});
-
+  const limit = 10;
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -151,8 +151,8 @@ const AdminCountry = () => {
     })
   }
 
-  const getAllCountries = () => {
-    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/country`)
+  const getAllCountries = (page, limit) => {
+    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/country?page=${page}&limit=${limit}`)
       .then((res) => {
         setCountries(res.data)
       }).catch((error) => { console.log(error) })
