@@ -5,7 +5,7 @@ import { Button, Divider, FormControl, FormLabel, IconButton, Input, Modal, Moda
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 const UserData = () => {
-  const [users, setUsers] = useState([]);
+  const [equipment, setequipment] = useState([]);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -14,7 +14,6 @@ const UserData = () => {
   const limit = 10;
   const [searchText, setSearchText] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
   const [statusFilter, setStatusFilter] = useState('');
@@ -22,7 +21,7 @@ const UserData = () => {
   const handleButtonClick = () => {
     setIsDropdownVisible(prevState => !prevState);
   };
-
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownVisible(false);
@@ -41,12 +40,12 @@ const UserData = () => {
 
   const fetchUsers = async (page, limit) => {
     try {
-      const response = await axios.get(`http://localhost:5000/collections/user?page=${page}&limit=${limit}`);
-      setUsers(response.data.users);
+      const response = await axios.get(`http://localhost:5000/collections/equipment?page=${page}&limit=${limit}`);
+      setequipment(response.data.equipment);
       setTotalPages(response.data.totalPages);
-      setSelectedUsers(new Array(response.data.users.length).fill(false));
+      setSelectedUsers(new Array(response.data.equipment.length).fill(false));
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Error fetching equipment:', error);
     }
   };
 
@@ -60,7 +59,7 @@ const UserData = () => {
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
-    setSelectedUsers(new Array(users.length).fill(!selectAll));
+    setSelectedUsers(new Array(equipment.length).fill(!selectAll));
   };
 
   const handleSelectUser = (index) => {
@@ -78,17 +77,20 @@ const UserData = () => {
     return `${day}-${month}-${year}`;
   };
 
-  const handleDeleteUser = async (userId) => {
+  const handleDeleteUser = async () => {
+    console.log('Deleting user with ID:', userIdToDelete);  // Debug log
     try {
-      await axios.delete(`http://localhost:5000/collections/user/${userId}`);
-      setUsers(users.filter(user => user._id !== userId));
+      await axios.delete(`http://localhost:5000/collections/equipment/${userIdToDelete}`);
+      setequipment(equipment.filter(user => user._id !== userIdToDelete));
       setShowModal(false);
-      toast.success('User deleted successfully');
+      toast.success('Equipment deleted successfully');
     } catch (error) {
       console.error('Error deleting user:', error);
       toast.error('Failed to delete user');
     }
   };
+  
+
   const handleSearch = async () => {
     if (!searchText && !statusFilter) {
       toast.error('Please enter something to search or select a status filter.');
@@ -96,7 +98,7 @@ const UserData = () => {
     }
 
     try {
-      let url = 'http://localhost:5000/collections/search';
+      let url = 'http://localhost:5000/collections/searchequipment';
 
       const params = {};
 
@@ -110,13 +112,13 @@ const UserData = () => {
 
       const response = await axios.get(url, { params });
 
-      // Assuming response.data is an array of users and totalPages is also fetched
-      setUsers(response.data);
+      // Assuming response.data is an array of equipment and totalPages is also fetched
+      setequipment(response.data);
       setTotalPages(response.totalPages);
-      toast.success('Users fetched successfully.');
-      console.log('Users fetched:', response.data); // Check fetched data in console
+      toast.success('Equipment fetched successfully.');
+      console.log('Equipment fetched:', response.data); // Check fetched data in console
     } catch (error) {
-      console.error('Error searching users:', error);
+      console.error('Error searching Equipment:', error);
       toast.error('Error searching. Please try again later.'); // Replace with toast or error handling
     }
   };
@@ -127,9 +129,11 @@ const UserData = () => {
     // fetchData();
   };
   const toggleModal = (userId) => {
+    console.log('Setting userIdToDelete:', userId);  // Debug log
     setUserIdToDelete(userId);
-    setShowModal(!showModal);
+    setShowModal(true);
   };
+  
   return (
     <div>
 
@@ -269,32 +273,30 @@ const UserData = () => {
                       <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
                     </div>
                   </th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Employee ID</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">First Name</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Last Name</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Email</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Mobile</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Branch</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Login Expiry Date</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Equipment Id</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Name</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Material Description</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Serial Number</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Material Code</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">End Customer</th>
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Country</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">State/Region</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">City</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Current Customer</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Dealer</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Pal Number</th>
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Created At</th>
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Updated At</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Department</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Password</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Skills</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Device ID</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Manager Email</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Device Registered Date</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer Warranty Startdate</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer Warranty Startdate</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Dealer Warranty Startdate</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Dealer Warranty Enddate</th>
+
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Action</th>
                 </tr>
               </thead>
-              <tbody className="[&amp;_tr:last-child]:border-0  ">
-                {users.length > 0 ? (
-                  users.map((user, index) => (
-                    <tr key={index} className="border-b transition-colors  data-[state=selected]:bg-muted">
+              <tbody className="[&_tr:last-child]:border-0">
+                {equipment && equipment.length > 0 ? (
+                  equipment.map((user, index) => (
+                    <tr key={index} className="border-b transition-colors data-[state=selected]:bg-muted">
                       <th scope="col" className="p-4">
                         <div className="flex items-center">
                           <input
@@ -307,31 +309,30 @@ const UserData = () => {
                           <label htmlFor={`checkbox-${index}`} className="sr-only">checkbox</label>
                         </div>
                       </th>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.employeeid}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.firstname}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.lastname}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.email}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.mobilenumber}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.branch}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.loginexpirydate)}</td>
+                      <td className="p-4 align-middle whitespace-nowrap">{user.equipmentid}</td>
+                      <td className="p-4 align-middle whitespace-nowrap">{user.name}</td>
+
+                      <td className="p-4 align-middle whitespace-nowrap">{user.materialdescription}</td>
+                      <td className="p-4 align-middle whitespace-nowrap">{user.serialnumber}</td>
+                      <td className="p-4 align-middle whitespace-nowrap">{user.materialcode}</td>
+                      <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.endcustomer)}</td>
                       <td className="p-4 align-middle whitespace-nowrap">{user.status}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.country}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.state}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.city}</td>
+                      <td className="p-4 align-middle whitespace-nowrap">{user.currentcustomer}</td>
+                      <td className="p-4 align-middle whitespace-nowrap">{user.dealer}</td>
+                      <td className="p-4 align-middle whitespace-nowrap">{user.palnumber}</td>
                       <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.createdAt)}</td>
                       <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.modifiedAt)}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.department}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.password}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.skills}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.deviceid}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{user.manageremail}</td>
-                      <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.deviceregistereddate)}</td>
+
+                      <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.custWarrantystartdate)}</td>
+                      <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.custWarrantyenddate)}</td>
+                      <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.dealerwarrantystartdate)}</td>
+                      <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.dealerwarrantyenddate)}</td>
                       <td className="p-4 align-middle whitespace-nowrap">
-                        <div className='flex gap-4 '>
+                        <div className="flex gap-4">
                           <button className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                               <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                              <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                              <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                             </svg>
                           </button>
                           <button onClick={() => toggleModal(user._id)} className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500">
@@ -339,6 +340,7 @@ const UserData = () => {
                               <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
                             </svg>
                           </button>
+
                         </div>
                       </td>
                     </tr>
@@ -348,7 +350,6 @@ const UserData = () => {
                     <td colSpan="21" className="p-4 font-bold">No data available</td>
                   </tr>
                 )}
-
               </tbody>
             </table>
           </div>
@@ -410,7 +411,7 @@ const UserData = () => {
                         </div>
                         <div class="">
                           <button
-                            onClick={() => handleDeleteUser(userIdToDelete)}
+                            onClick={handleDeleteUser}
                             class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 "
                           >
                             Delete

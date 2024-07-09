@@ -30,7 +30,6 @@ import moment from 'moment';
 
 const AdminCountry = () => {
 
-
   const [showModal, setShowModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [countrys, setCountries] = useState([]);
