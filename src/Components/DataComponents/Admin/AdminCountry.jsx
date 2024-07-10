@@ -26,68 +26,26 @@ import moment from 'moment';
 
 
 
-const rows = [
-  {
-    name: 'India',
-    status: 'Active',
-    createdAt: '2021-01-15',
-    modifiedAt: '2023-05-12',
-    id: 1,
-  },
-  {
-    name: 'USA',
-    status: 'Inactive',
-    createdAt: '2020-03-22',
-    modifiedAt: '2023-06-18',
-    id: 2,
-  },
-  {
-    name: 'Australia',
-    status: 'Active',
-    createdAt: '2019-07-08',
-    modifiedAt: '2023-04-27',
-    id: 3,
-  },
-  {
-    name: 'Pakistan',
-    status: 'Pending',
-    createdAt: '2022-02-11',
-    modifiedAt: '2023-05-09',
-    id: 4,
-  },
-  {
-    name: 'England',
-    status: 'Active',
-    createdAt: '2018-11-30',
-    modifiedAt: '2023-05-25',
-    id: 5,
-  },
-  {
-    name: 'New Zealand',
-    status: 'Inactive',
-    createdAt: '2021-06-14',
-    modifiedAt: '2023-07-01',
-    id: 6,
-  },
-];
 
 
 const AdminCountry = () => {
-
 
   const [showModal, setShowModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [countrys, setCountries] = useState([]);
   const [currentCountry, setCurrentCountry] = useState({});
-
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [selectAll, setSelectAll] = useState(false);
+  const limit = 10;
+
   const [selectedRows, setSelectedRows] = useState([]);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     if (!selectAll) {
       // Select all rows
-      setSelectedRows(countrys.map((country) => country._id));
+      setSelectedRows(countrys?.map((country) => country._id));
     } else {
       // Deselect all rows
       setSelectedRows([]);
@@ -152,14 +110,19 @@ const AdminCountry = () => {
   }
 
   const getAllCountries = () => {
-    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/country`)
+    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/country?page=${page}&limit=${limit}`)
       .then((res) => {
-        setCountries(res.data)
+        setCountries(res.data.countries)
+        setTotalPages(res.data.totalPages)
       }).catch((error) => { console.log(error) })
   }
   useEffect(() => {
     getAllCountries()
   }, [])
+
+  useEffect(() => {
+    getAllCountries()
+  }, [page])
 
   const handleSubmit = (id) => {
     if (editModal && id) {
@@ -183,6 +146,15 @@ const AdminCountry = () => {
         getAllCountries()
       }).catch((error) => { console.log(error) })
   }
+  
+  const handlePreviousPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
+
 
 
   return (
@@ -240,7 +212,7 @@ const AdminCountry = () => {
                     id={`checkbox-${index}`}
                     type="checkbox"
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
-                    checked={selectedRows.includes(country?._id)}
+                    checked={selectedRows?.includes(country?._id)}
                     onChange={() => handleRowSelect(country?._id)}
                   />
                   <label htmlFor={`checkbox-${index}`} className="sr-only">
@@ -264,30 +236,56 @@ const AdminCountry = () => {
                 <td className="p-4 align-middle whitespace-nowrap">{moment(country?.createdAt).format('MMMM D, YYYY')}</td>
                 <td className="p-4 align-middle whitespace-nowrap">{moment(country?.modifiedAt).format('MMMM D, YYYY')}</td>
 
-                <td className="p-4 align-middle whitespace-nowrap " >
-                  {/* <Dropdown className="p-1  text-center">
-                  <MenuButton className="p-1 ml-2 text-center"><MoreVert/></MenuButton>
-                  <Menu>
-                    <MenuItem>Add item</MenuItem>
-                  </Menu>
-                </Dropdown> */}
-
-                  <div className="flex flex-row items-center">
-                    <IconButton onClick={() => { handleOpenCountryModal(country) }} >
-                      <EditIcon color='success' />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(country?._id)}>
-                      <DeleteIcon color='danger' />
-                    </IconButton>
-                  </div>
-
-                </td>
+                
+                <td className="p-4 align-middle whitespace-nowrap">
+                        <div className='flex gap-4 '>
+                          <button onClick={() => { handleOpenCountryModal(country) }} className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                              <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                            </svg>
+                          </button>
+                          <button onClick={() => handleDelete(country?._id)} className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash3-fill" viewBox="0 0 16 16">
+                              <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
 
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <div className="Pagination-laptopUp" style={{ display: 'flex', justifyContent: 'space-between', padding: '16px' }}>
+          <button
+            className='border rounded p-1 cursor-pointer w-[100px] hover:bg-gray-300 px-2 bg-gray-100 font-semibold'
+            onClick={handlePreviousPage}
+            disabled={page === 1}
+          >
+            Previous
+          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map(p => (
+              <button
+                className={`border px-3 rounded ${p === page ? 'bg-blue-700 text-white' : ''}`}
+                key={p}
+                onClick={() => setPage(p)}
+                disabled={p === page}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+          <button
+            className='border rounded p-1 cursor-pointer hover:bg-blue-500 px-2 bg-blue-700 w-[100px] text-white font-semibold'
+            onClick={handleNextPage}
+            disabled={page === totalPages}
+          >
+            Next
+          </button>
+        </div>
 
       <Modal
         open={showModal}

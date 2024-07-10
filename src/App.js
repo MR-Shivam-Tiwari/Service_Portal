@@ -57,9 +57,10 @@ function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    navigate('/user');
-  }, []); // Empty dependency array ensures the effect runs only once on component mount
+  // useEffect(() => {
+  //   navigate('/user');
+  // }, []); 
+  // Empty dependency array ensures the effect runs only once on component mount
 
   const handleRouteChange = () => {
     // Assuming your routes are in the format "/orders" or "/order-list"
