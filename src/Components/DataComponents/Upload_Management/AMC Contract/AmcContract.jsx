@@ -312,15 +312,15 @@ function AmcContract() {
 
                 <div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Sales Docs</label>
-                  <input type="text" onChange={(e) => handleFormData('salesdoc', e.target.value)}  id="name" value={currentData?.salesdoc} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <input type="text" onChange={(e) => handleFormData('salesdoc', e.target.value)}  id="name" value={currentData?.salesdoc} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Start Date	</label>
-                  <input type="date" onChange={(e) => handleFormData('startdate', e.target.value)}  id="name" value={currentData?.startdate ? currentData?.startdate?.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <input type="date" onChange={(e) => handleFormData('startdate', e.target.value)}  id="name" value={currentData?.startdate ? currentData?.startdate?.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">End Date	</label>
-                  <input type="date" onChange={(e) => handleFormData('enddate', e.target.value)}  id="name" value={currentData?.enddate ? currentData?.enddate?.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <input type="date" onChange={(e) => handleFormData('enddate', e.target.value)}  id="name" value={currentData?.enddate ? currentData?.enddate?.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-3 text-sm font-medium text-gray-900 ">Sa type(ZDRC/ZDRN)	</label>
@@ -331,11 +331,11 @@ function AmcContract() {
                   </Select>
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Serial Number	</label>
-                  <input type="text" onChange={(e) => handleFormData('serialnumber', e.target.value)}  id="name" value={currentData?.serialnumber} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <input type="text" onChange={(e) => handleFormData('serialnumber', e.target.value)}  id="name" value={currentData?.serialnumber} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Material Code	</label>
-                  <input type="text" onChange={(e) => handleFormData('materialcode', e.target.value)}  id="name" value={currentData?.materialcode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <input type="text" onChange={(e) => handleFormData('materialcode', e.target.value)}  id="name" value={currentData?.materialcode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
 
                 </div>
                 <div>
