@@ -13,12 +13,14 @@ const UserData = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const limit = 10;
   const [searchText, setSearchText] = useState('');
-  const [showModal, setShowModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [currentData, setCurrentData] = useState({});
   const dropdownRef = useRef(null);
   const [statusFilter, setStatusFilter] = useState('');
   const [open, setOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
   const handleButtonClick = () => {
     setIsDropdownVisible(prevState => !prevState);
   };
@@ -28,6 +30,18 @@ const UserData = () => {
       setIsDropdownVisible(false);
     }
   };
+  const handleCloseModal = () => {
+    setShowModal(prev => !prev);
+    setEditModal(false)
+    setCurrentData({})
+  };
+
+  const handleOpenModal = (country) => {
+    setCurrentData(country);
+    setEditModal(true)
+    setShowModal(true);
+  };
+
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -36,10 +50,10 @@ const UserData = () => {
     };
   }, []);
   useEffect(() => {
-    fetchUsers(page, limit);
+    fetchUsers();
   }, [page, limit]);
 
-  const fetchUsers = async (page, limit) => {
+  const fetchUsers = async () => {
     try {
       const response = await axios.get(`http://localhost:5000/collections/user?page=${page}&limit=${limit}`);
       setUsers(response.data.users);
@@ -130,8 +144,40 @@ const UserData = () => {
     setUserIdToDelete(userId);
     setShowModal(!showModal);
   };
+
+  const handleFormData = (name, value) => {
+
+    setCurrentData(prev => {
+      return {
+        ...prev, [name]: value
+      }
+    })
+  }
+  const handleSubmit = (id) => {
+    if (editModal && id) {
+      handleEditData(id)
+    }
+    else {
+      handleAddData()
+    }
+  }
+ 
+  const handleAddData = () => {
+    axios.post(`${process.env.REACT_APP_BASE_URL}/collections/user`, currentData)
+      .then((res) => {
+        fetchUsers()
+      }).catch((error) => { console.log(error) })
+  }
+  const handleEditData = (id) => {
+    axios.patch(`${process.env.REACT_APP_BASE_URL}/collections/user/${id}`, currentData)
+      .then((res) => {
+        fetchUsers()
+      }).catch((error) => { console.log(error) })
+  }
+
+ 
   return (
-    <div>
+    <>
 
       <div className='py-2 flex items-center justify-between gap-5'>
 
@@ -250,7 +296,7 @@ const UserData = () => {
 
       </div>
       <div className="border bg-card text-card-foreground shadow-sm  w-full">
-        <Toaster position="top-right" reverseOrder={false} />
+      
 
         <div className="">
           <div className="relative w-full overflow-x-auto">
@@ -328,7 +374,7 @@ const UserData = () => {
                       <td className="p-4 align-middle whitespace-nowrap">{formatDate(user.deviceregistereddate)}</td>
                       <td className="p-4 align-middle whitespace-nowrap">
                         <div className='flex gap-4 '>
-                          <button className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500">
+                          <button  onClick={() => { handleOpenModal(user) }} className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                               <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                               <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
@@ -454,7 +500,74 @@ const UserData = () => {
           </button>
         </div>
       </div>
-    </div>
+      {/* <Modal
+      open={showModal}
+      onClose={handleCloseModal}
+      className=""
+      size="lg"
+    >
+
+      <ModalDialog size='lg' className="p-2 " >
+
+        <div className="flex items-start justify-between p-2 border-b border-solid border-blueGray-200 rounded-t">
+          <h3 className="text-3xl font-semibold">
+            {editModal ? (
+              "Update "
+            ) : (
+              "Create "
+            )}
+          </h3>
+
+        </div>
+
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          handleCloseModal();
+        }} className="">
+          <div className="relative  border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[400px] overflow-y-auto">
+
+
+
+            <div class="grid md:grid-cols-2 md:gap-6">
+              <div class="relative z-0 w-full mb-5 group">
+                <input onChange={(e) => handleFormData('name', e.target.value)} type="text" name="name" id="name" value={currentData?.name} class="block py-2.5 px-0 w-full font-bold text-md text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none :text-white :border-gray-600 :focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                <label class="peer-focus:font-medium absolute text-sm text-gray-500 :text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus::text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Country Name</label>
+              </div>
+              <div>
+                <Select variant='soft' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
+                  <Option value="">Select Status</Option>
+                  <Option value="Active">Active</Option>
+                  <Option value="Pending">Pending</Option>
+                  <Option value="Inactive">Inactive</Option>
+                </Select>
+              </div>
+             
+            </div>
+            <div>
+                <Select variant='soft' defaultValue={currentData?.country || ""} onChange={(e, value) => handleFormData('country', value)}>
+                  <Option value="">Select Country</Option>
+                  {
+                    users?.map((user) => (
+                      <Option value={user?.name}>{user?.name}</Option>
+                    ))
+                  }
+                
+                </Select>
+              </div>
+
+
+          </div>
+          <div className="flex items-center justify-end mt-3 rounded-b">
+
+            <button onClick={() => handleCloseModal()} type="button" class="text-white bg-gradient-to-r from-red-300 via-red-500 to-red-600 hover:bg-gradient-to-br  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Close</button>
+
+            <button onClick={() => handleSubmit(currentData?._id)} type="submit" className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Save Country</button>
+          </div>
+        </form>
+
+      </ModalDialog>
+    </Modal> */}
+    </>
   );
 };
 

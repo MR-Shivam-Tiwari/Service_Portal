@@ -94,8 +94,8 @@ function AppContent() {
         <Header />
         <Sidebar onSidebarItemClick={handleSidebarItemClick} />
         <Box
-          component="main"
-          className="MainContent"
+          component=""
+          className=" "
           sx={{
             px: { xs: 2, md: 6 },
             pt: {
