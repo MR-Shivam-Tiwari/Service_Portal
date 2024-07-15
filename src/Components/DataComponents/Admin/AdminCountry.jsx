@@ -1,25 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import Button from '@mui/joy/Button';
-import Chip from '@mui/joy/Chip';
-import Divider from '@mui/joy/Divider';
+
 import FormControl from '@mui/joy/FormControl';
-import EditIcon from '@mui/icons-material/Edit';
-import Link from '@mui/joy/Link';
+
 import Input from '@mui/joy/Input';
-import Backdrop from '@mui/material/Backdrop';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Table from '@mui/joy/Table';
-import Sheet from '@mui/joy/Sheet';
-import Checkbox from '@mui/joy/Checkbox';
-import Typography from '@mui/joy/Typography';
-import MoreVert from '@mui/icons-material/MoreVert';
+
 
 import SearchIcon from '@mui/icons-material/Search';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import BlockIcon from '@mui/icons-material/Block';
-import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
-import { Box, DialogActions, DialogContent, DialogTitle, Dropdown, IconButton, Menu, MenuButton, MenuItem, Modal, ModalClose, ModalDialog, Option, Select } from '@mui/joy';
+
+import {  Modal, ModalDialog, Option, Select } from '@mui/joy';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import moment from 'moment';
@@ -297,7 +285,7 @@ const AdminCountry = () => {
         <ModalDialog size='lg' className="p-2 " >
 
           <div className="flex items-start justify-between p-2 border-b border-solid border-blueGray-200 rounded-t">
-            <h3 className="text-3xl font-semibold">
+            <h3 className="text-2xl font-semibold">
               {editModal ? (
                 "Update Country"
               ) : (
@@ -316,11 +304,16 @@ const AdminCountry = () => {
 
 
               <div class="grid md:grid-cols-2 md:gap-6">
-                <div class="relative z-0 w-full mb-5 group">
-                  <input onChange={(e) => handleFormData('name', e.target.value)} type="text" name="name" id="name" value={currentCountry?.name} class="block py-2.5 px-0 w-full font-bold text-md text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none :text-white :border-gray-600 :focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                  <label class="peer-focus:font-medium absolute text-sm text-gray-500 :text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus::text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Country Name</label>
-                </div>
+                
+
+              <div className='relative z-0 w-full mb-5 group'>
+              <label  class="block mb-2 text-sm font-medium text-gray-900 ">Country Name</label>
+                  <input type="text"  onChange={(e) => handleFormData('name', e.target.value)}  name="name" id="name" value={currentCountry?.name} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+              </div>
                 <div>
+              <label  class="block mb-2 text-sm font-medium text-gray-900 ">Status</label>
+
                   <Select variant='soft' defaultValue={currentCountry?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
                     <Option value="">Select Status</Option>
                     <Option value="Active">Active</Option>
@@ -334,9 +327,9 @@ const AdminCountry = () => {
             </div>
             <div className="flex items-center justify-end mt-3 rounded-b">
 
-              <button onClick={() => handleCloseCountryModal()} type="button" class="text-white bg-gradient-to-r from-red-300 via-red-500 to-red-600 hover:bg-gradient-to-br  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Close</button>
+              <button onClick={() => handleCloseCountryModal()} type="button" class="focus:outline-none text-black  focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 :bg-red-600 :hover:bg-red-700 :focus:ring-red-900 me-2 mb-2">Close</button>
 
-              <button onClick={() => handleSubmit(currentCountry?._id)} type="submit" className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Save Country</button>
+              <button onClick={() => handleSubmit(currentCountry?._id)} type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2">Save Country</button>
             </div>
           </form>
 
