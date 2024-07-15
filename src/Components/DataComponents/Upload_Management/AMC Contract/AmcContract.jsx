@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react';
 import FormControl from '@mui/joy/FormControl';
 
 import Input from '@mui/joy/Input';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -48,7 +45,7 @@ function AmcContract() {
     }
   };
 
-  const handleCloseCountryModal = () => {
+  const handleClose = () => {
     setShowModal(prev => !prev);
     setEditModal(false)
     setCurrentData({})
@@ -88,14 +85,14 @@ function AmcContract() {
               "success"
             )
           }).then((res) => {
-            getAllCountries()
+            getData()
           }).catch((error) => { console.log(error) })
 
       }
     })
   }
 
-  const getAllCountries = () => {
+  const getData = () => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/collections/amccontracts?page=${page}&limit=${limit}`)
       .then((res) => {
         setData(res.data.amcContracts)
@@ -103,11 +100,11 @@ function AmcContract() {
       }).catch((error) => { console.log(error) })
   }
   useEffect(() => {
-    getAllCountries()
+    getData()
   }, [])
 
   useEffect(() => {
-    getAllCountries()
+    getData()
   }, [page])
 
   const handleSubmit = (id) => {
@@ -115,21 +112,21 @@ function AmcContract() {
       handleEditCountry(id)
     }
     else {
-      handleAddCountry()
+      hanleAddData()
     }
   }
 
-  const handleAddCountry = () => {
+  const hanleAddData = () => {
     axios.post(`${process.env.REACT_APP_BASE_URL}/collections/amccontracts`, currentData)
       .then((res) => {
-        getAllCountries()
+        getData()
       }).catch((error) => { console.log(error) })
   }
 
   const handleEditCountry = (id) => {
     axios.put(`${process.env.REACT_APP_BASE_URL}/collections/amccontracts/${id}`, currentData)
       .then((res) => {
-        getAllCountries()
+        getData()
       }).catch((error) => { console.log(error) })
   }
 
@@ -154,7 +151,7 @@ function AmcContract() {
           </FormControl>
         </div>
 
-        <button onClick={handleCloseCountryModal} type="button" className="text-white col-span-2 md:col-span-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2">Create</button>
+        <button onClick={handleClose} type="button" className="text-white col-span-2 md:col-span-1 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2">Create</button>
 
       </div>
       {
@@ -216,7 +213,7 @@ function AmcContract() {
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{country?.serialnumber}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{country?.materialcode}</td>
 
-                <td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">
                   <span
                     className={`text-xs font-medium px-2.5 py-0.5 rounded border ${country?.status === "Active"
                       ? "bg-green-100 text-green-800 border-green-400"
@@ -284,7 +281,7 @@ function AmcContract() {
 
       <Modal
         open={showModal}
-        onClose={handleCloseCountryModal}
+        onClose={handleClose}
         className="z-[1]"
         size="lg"
       >
@@ -304,7 +301,7 @@ function AmcContract() {
 
           <form onSubmit={(e) => {
             e.preventDefault();
-            handleCloseCountryModal();
+            handleClose();
           }} className="">
             <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[400px] overflow-y-auto">
 
@@ -357,7 +354,7 @@ function AmcContract() {
             </div>
             <div className="flex items-center justify-end mt-3 rounded-b">
 
-              <button onClick={() => handleCloseCountryModal()} type="button" class="focus:outline-none text-black  focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 :bg-red-600 :hover:bg-red-700 :focus:ring-red-900 me-2 mb-2">Close</button>
+              <button onClick={() => handleClose()} type="button" class="focus:outline-none text-black  focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 :bg-red-600 :hover:bg-red-700 :focus:ring-red-900 me-2 mb-2">Close</button>
 
               <button onClick={() => handleSubmit(currentData?._id)} type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2">Save Country</button>
             </div>
