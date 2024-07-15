@@ -18,8 +18,8 @@ import moment from 'moment';
 function AmcContract() {
   const [showModal, setShowModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [countrys, setCountries] = useState([]);
-  const [currentCountry, setCurrentCountry] = useState({});
+  const [data, setData] = useState([]);
+  const [currentData, setCurrentData] = useState({});
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectAll, setSelectAll] = useState(false);
@@ -31,7 +31,7 @@ function AmcContract() {
     setSelectAll(!selectAll);
     if (!selectAll) {
       // Select all rows
-      setSelectedRows(countrys?.map((country) => country._id));
+      setSelectedRows(data?.map((country) => country._id));
     } else {
       // Deselect all rows
       setSelectedRows([]);
@@ -51,18 +51,18 @@ function AmcContract() {
   const handleCloseCountryModal = () => {
     setShowModal(prev => !prev);
     setEditModal(false)
-    setCurrentCountry({})
+    setCurrentData({})
   };
 
   const handleOpenModal = (country) => {
-    setCurrentCountry(country);
+    setCurrentData(country);
     setEditModal(true)
     setShowModal(true);
   };
 
   const handleFormData = (name, value) => {
 
-    setCurrentCountry(prev => {
+    setCurrentData(prev => {
       return {
         ...prev, [name]: value
       }
@@ -98,7 +98,7 @@ function AmcContract() {
   const getAllCountries = () => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/collections/amccontracts?page=${page}&limit=${limit}`)
       .then((res) => {
-        setCountries(res.data.amcContracts)
+        setData(res.data.amcContracts)
         setTotalPages(res.data.totalPages)
       }).catch((error) => { console.log(error) })
   }
@@ -120,14 +120,14 @@ function AmcContract() {
   }
 
   const handleAddCountry = () => {
-    axios.post(`${process.env.REACT_APP_BASE_URL}/collections/amccontracts`, currentCountry)
+    axios.post(`${process.env.REACT_APP_BASE_URL}/collections/amccontracts`, currentData)
       .then((res) => {
         getAllCountries()
       }).catch((error) => { console.log(error) })
   }
 
   const handleEditCountry = (id) => {
-    axios.put(`${process.env.REACT_APP_BASE_URL}/collections/amccontracts/${id}`, currentCountry)
+    axios.put(`${process.env.REACT_APP_BASE_URL}/collections/amccontracts/${id}`, currentData)
       .then((res) => {
         getAllCountries()
       }).catch((error) => { console.log(error) })
@@ -193,7 +193,7 @@ function AmcContract() {
             </tr>
           </thead>
           <tbody className="[&amp;_tr:last-child]:border-0  ">
-            {countrys?.map((country, index) => (
+            {data?.map((country, index) => (
               <tr key={country?._id} className="border-b transition-colors  data-[state=selected]:bg-muted">
                 <th scope="col" className="p-4">
                   <div className="flex items-center">
@@ -210,8 +210,8 @@ function AmcContract() {
                   </div>
                 </th>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{country?.salesdoc}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{country?.startdate}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{country?.enddate}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{moment(country?.startdate).format("DD-MM-YYYY")}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{moment(country?.enddate).format("DD-MM-YYYY")}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{country?.satypeZDRC_ZDRN}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{country?.serialnumber}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{country?.materialcode}</td>
@@ -285,7 +285,7 @@ function AmcContract() {
       <Modal
         open={showModal}
         onClose={handleCloseCountryModal}
-        className="z-[0]"
+        className="z-[1]"
         size="lg"
       >
 
@@ -315,33 +315,36 @@ function AmcContract() {
 
                 <div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Sales Docs</label>
-                  <input type="text" onChange={(e) => handleFormData('salesdoc', e.target.value)}  id="name" value={currentCountry?.salesdoc} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <input type="text" onChange={(e) => handleFormData('salesdoc', e.target.value)}  id="name" value={currentData?.salesdoc} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Start Date	</label>
-                  <input type="date" onChange={(e) => handleFormData('startdate', e.target.value)}  id="name" value={currentCountry?.enddate ? currentCountry.startdate.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <input type="date" onChange={(e) => handleFormData('startdate', e.target.value)}  id="name" value={currentData?.startdate ? currentData?.startdate?.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">End Date	</label>
-                  <input type="date" onChange={(e) => handleFormData('enddate', e.target.value)}  id="name" value={currentCountry?.enddate ? currentCountry.enddate.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <input type="date" onChange={(e) => handleFormData('enddate', e.target.value)}  id="name" value={currentData?.enddate ? currentData?.enddate?.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Sa type(ZDRC/ZDRN)	</label>
-                  <input type="text" onChange={(e) => handleFormData('satypeZDRC_ZDRN', e.target.value)}  id="name" value={currentCountry?.satypeZDRC_ZDRN} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
+                  <label class="block mb-3 text-sm font-medium text-gray-900 ">Sa type(ZDRC/ZDRN)	</label>
+                  <Select variant='soft' className='' defaultValue={currentData?.satypeZDRC_ZDRN || ""} onChange={(e, value) => handleFormData('satypeZDRC_ZDRN', value)}>
+                    <Option value="">Select</Option>
+                    <Option value="ZDRC">ZDRC</Option>
+                    <Option value="ZDRN">ZDRN</Option>
+                  </Select>
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Serial Number	</label>
-                  <input type="text" onChange={(e) => handleFormData('serialnumber', e.target.value)}  id="name" value={currentCountry?.serialnumber} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <input type="text" onChange={(e) => handleFormData('serialnumber', e.target.value)}  id="name" value={currentData?.serialnumber} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Material Code	</label>
-                  <input type="text" onChange={(e) => handleFormData('materialcode', e.target.value)}  id="name" value={currentCountry?.materialcode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <input type="text" onChange={(e) => handleFormData('materialcode', e.target.value)}  id="name" value={currentData?.materialcode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div>
                 <div>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Status</label>
 
-                  <Select variant='soft' className='' defaultValue={currentCountry?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
+                  <Select variant='soft' className='' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
                     <Option value="">Select Status</Option>
                     <Option value="Active">Active</Option>
                     <Option value="Pending">Pending</Option>
@@ -356,7 +359,7 @@ function AmcContract() {
 
               <button onClick={() => handleCloseCountryModal()} type="button" class="focus:outline-none text-black  focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 :bg-red-600 :hover:bg-red-700 :focus:ring-red-900 me-2 mb-2">Close</button>
 
-              <button onClick={() => handleSubmit(currentCountry?._id)} type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2">Save Country</button>
+              <button onClick={() => handleSubmit(currentData?._id)} type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2">Save Country</button>
             </div>
           </form>
 
