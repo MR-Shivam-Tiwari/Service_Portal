@@ -287,7 +287,7 @@ const AdminCountry = () => {
           <div className="flex items-start justify-between p-2 border-b border-solid border-blueGray-200 rounded-t">
             <h3 className="text-2xl font-semibold">
               {editModal ? (
-                "Update Country"
+                "Update"
               ) : (
                 "Create Country"
               )}

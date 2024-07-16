@@ -343,7 +343,7 @@ function Dealer() {
           <div className="flex items-start justify-between p-2 border-b px-5 border-solid border-blueGray-200 rounded-t thin-scroll">
             <h3 className="text-2xl font-semibold">
               {editModal ? (
-                "Update Country"
+                "Update"
               ) : (
                 "Create"
               )}

@@ -90,7 +90,7 @@ function DealerStock() {
       confirmButtonText: "Yes, delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`${process.env.REACT_APP_BASE_URL}/collections/customer/${id}`)
+        axios.delete(`${process.env.REACT_APP_BASE_URL}/collections/dealerstocks/${id}`)
           .then((res) => {
             Swal.fire(
               "Deleted!",
@@ -107,10 +107,10 @@ function DealerStock() {
 
   const getData = () => {
     setLoader(true)
-    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/customer?page=${page}&limit=${limit}`)
+    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/dealerstocks?page=${page}&limit=${limit}`)
       .then((res) => {
         setLoader(false)
-        setData(res.data.customers)
+        setData(res.data.dealerStocks)
         setTotalPages(res.data.totalPages)
       }).catch((error) => { 
         setLoader(false)
@@ -135,14 +135,14 @@ function DealerStock() {
   }
 
   const handleCreate = () => {
-    axios.post(`${process.env.REACT_APP_BASE_URL}/collections/customer`, currentData)
+    axios.post(`${process.env.REACT_APP_BASE_URL}/collections/dealerstocks`, currentData)
       .then((res) => {
         getData()
       }).catch((error) => { console.log(error) })
   }
 
   const handleEditCountry = (id) => {
-    axios.put(`${process.env.REACT_APP_BASE_URL}/collections/customer/${id}`, currentData)
+    axios.put(`${process.env.REACT_APP_BASE_URL}/collections/dealerstocks/${id}`, currentData)
       .then((res) => {
         getData()
       }).catch((error) => { console.log(error) })
@@ -209,21 +209,15 @@ function DealerStock() {
                   <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
                 </div>
               </th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer Code (ID)</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer Name</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Hospital Name</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Street</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">City</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">PostalCode</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">District</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Region</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Country</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Telephone</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Tax Number1</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Tax Number2</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Email</th>
+           
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Dealer Code (ID)</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Dealer Name</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Dealer City</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Material Code</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Material Description</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Plant</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Unrestricted Quantity</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer Type</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Created Date</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Modified  Date</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Action</th>
@@ -247,19 +241,13 @@ function DealerStock() {
                     </label>
                   </div>
                 </th>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.customercodeid}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.customername}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.hospitalname}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.street}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.city}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.postalcode}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.district}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.region}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.country}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.telephone}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.taxnumber1}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.taxnumber2}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.email}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.dealercodeid}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.dealername}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.dealercity}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.materialcode}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.materialdescription}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.plant}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.unrestrictedquantity}</td>
 
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">
                   <span
@@ -273,7 +261,6 @@ function DealerStock() {
                     {item?.status}
                   </span>
                 </td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.customertype}</td>
 
                 <td className="p-4 align-middle whitespace-nowrap">{moment(item?.createdAt).format('MMMM D, YYYY')}</td>
                 <td className="p-4 align-middle whitespace-nowrap">{moment(item?.modifiedAt).format('MMMM D, YYYY')}</td>
@@ -341,7 +328,7 @@ function DealerStock() {
           <div className="flex items-start justify-between p-2 border-b px-5 border-solid border-blueGray-200 rounded-t thin-scroll">
             <h3 className="text-2xl font-semibold">
               {editModal ? (
-                "Update Country"
+                "Update"
               ) : (
                 "Create"
               )}
@@ -366,72 +353,43 @@ function DealerStock() {
 
 
                 <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Customer Code (ID)</label>
-                  <input type="text" required  onChange={(e) => handleFormData('customercodeid', e.target.value)} id="name" value={currentData?.customercodeid} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Dealer Code (ID)</label>
+                  <input type="text" required  onChange={(e) => handleFormData('dealercodeid', e.target.value)} id="name" value={currentData?.dealercodeid} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Customer Name		</label>
-                  <input type="text" onChange={(e) => handleFormData('customername', e.target.value)} id="name" value={currentData?.customername} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Dealer Name		</label>
+                  <input type="text" onChange={(e) => handleFormData('dealername', e.target.value)} id="name" value={currentData?.dealername} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Hospital Name		</label>
-                  <input type="text" onChange={(e) => handleFormData('hospitalname', e.target.value)} id="name" value={currentData?.hospitalname} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Street	</label>
-                  <input type="text" onChange={(e) => handleFormData('street', e.target.value)} id="name" value={currentData?.street} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2  text-sm font-medium text-gray-900 ">City	</label>
-                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.city || ""} onChange={(e, value) => handleFormData('city', value)}>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Dealer City		</label>
+                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.dealercity || ""} onChange={(e, value) => handleFormData('dealercity', value)}>
                     <Option value="">Select</Option>
                     {
                       cityList.map((item) => <Option value={item?.name}>{item?.name}</Option>)
                     }
 
                   </Select>
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Material Code	</label>
+                  <input type="text" onChange={(e) => handleFormData('materialcode', e.target.value)} id="name" value={currentData?.materialcode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2  text-sm font-medium text-gray-900 ">Material Description	</label>
+                  <input type="text" onChange={(e) => handleFormData('materialdescription', e.target.value)} id="name" value={currentData?.materialdescription} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
                 </div><div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Postal Code	</label>
-                  <input type="text" onChange={(e) => handleFormData('postalcode', e.target.value)} id="name" value={currentData?.postalcode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Plant	</label>
+                  <input type="text" onChange={(e) => handleFormData('plant', e.target.value)} id="name" value={currentData?.plant} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">District	</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Unrestricted Quantity	</label>
+                  <input type="text" onChange={(e) => handleFormData('unrestrictedquantity', e.target.value)} id="name" value={currentData?.unrestrictedquantity} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Region	</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Country	</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Telephone	</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Tax Number1		</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Tax Number2		</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Email		</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
+                
                 <div>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Status</label>
 
@@ -442,11 +400,7 @@ function DealerStock() {
                     <Option value="Inactive">Inactive</Option>
                   </Select>
                 </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Customer Type			</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
+               
 
               </div>
 
