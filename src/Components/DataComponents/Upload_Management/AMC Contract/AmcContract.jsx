@@ -312,15 +312,15 @@ function AmcContract() {
 
                 <div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Sales Docs</label>
-                  <input type="text" onChange={(e) => handleFormData('salesdoc', e.target.value)}  id="name" value={currentData?.salesdoc} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
+                  <input type="text" onChange={(e) => handleFormData('salesdoc', e.target.value)}  id="name" value={currentData?.salesdoc} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " />
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Start Date	</label>
-                  <input type="date" onChange={(e) => handleFormData('startdate', e.target.value)}  id="name" value={currentData?.startdate ? currentData?.startdate?.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
+                  <input type="date" onChange={(e) => handleFormData('startdate', e.target.value)}  id="name" value={currentData?.startdate ? currentData?.startdate?.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5g-gray-700order-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">End Date	</label>
-                  <input type="date" onChange={(e) => handleFormData('enddate', e.target.value)}  id="name" value={currentData?.enddate ? currentData?.enddate?.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
+                  <input type="date" onChange={(e) => handleFormData('enddate', e.target.value)}  id="name" value={currentData?.enddate ? currentData?.enddate?.slice(0, 10) : ''} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5g-gray-700order-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-3 text-sm font-medium text-gray-900 ">Sa type(ZDRC/ZDRN)	</label>
@@ -331,11 +331,11 @@ function AmcContract() {
                   </Select>
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Serial Number	</label>
-                  <input type="text" onChange={(e) => handleFormData('serialnumber', e.target.value)}  id="name" value={currentData?.serialnumber} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
+                  <input type="text" onChange={(e) => handleFormData('serialnumber', e.target.value)}  id="name" value={currentData?.serialnumber} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5g-gray-700order-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Material Code	</label>
-                  <input type="text" onChange={(e) => handleFormData('materialcode', e.target.value)}  id="name" value={currentData?.materialcode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 :bg-gray-700 :border-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
+                  <input type="text" onChange={(e) => handleFormData('materialcode', e.target.value)}  id="name" value={currentData?.materialcode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5g-gray-700order-gray-600 :placeholder-gray-400 :text-white :focus:ring-blue-500 :focus:border-blue-500" />
 
                 </div>
                 <div>
@@ -354,9 +354,9 @@ function AmcContract() {
             </div>
             <div className="flex items-center justify-end mt-3 rounded-b">
 
-              <button onClick={() => handleClose()} type="button" class="focus:outline-none text-black  focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 :bg-red-600 :hover:bg-red-700 :focus:ring-red-900 me-2 mb-2">Close</button>
+              <button onClick={() => handleClose()} type="button" class="focus:outline-none text-black  focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2g-red-600 :hover:bg-red-700 :focus:ring-red-900 me-2 mb-2">Close</button>
 
-              <button onClick={() => handleSubmit(currentData?._id)} type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2">Save Country</button>
+              <button onClick={() => handleSubmit(currentData?._id)} type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2g-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2">Save Country</button>
             </div>
           </form>
 

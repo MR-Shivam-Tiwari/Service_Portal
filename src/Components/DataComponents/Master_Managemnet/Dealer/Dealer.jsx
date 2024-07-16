@@ -1,488 +1,472 @@
-import React, { useState } from 'react';
-import { ColorPaletteProp } from '@mui/joy/styles';
-import Avatar from '@mui/joy/Avatar';
-import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import Chip from '@mui/joy/Chip';
-import Divider from '@mui/joy/Divider';
+import React, { useEffect, useState } from 'react';
+
 import FormControl from '@mui/joy/FormControl';
-import FormLabel from '@mui/joy/FormLabel';
-import Link from '@mui/joy/Link';
+
 import Input from '@mui/joy/Input';
-import Modal from '@mui/joy/Modal';
-import ModalDialog from '@mui/joy/ModalDialog';
-import ModalClose from '@mui/joy/ModalClose';
-import Select from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
-import Table from '@mui/joy/Table';
-import Sheet from '@mui/joy/Sheet';
-import Checkbox from '@mui/joy/Checkbox';
-import IconButton, { iconButtonClasses } from '@mui/joy/IconButton';
-import Typography from '@mui/joy/Typography';
-import Menu from '@mui/joy/Menu';
-import MenuButton from '@mui/joy/MenuButton';
-import MenuItem from '@mui/joy/MenuItem';
-import Dropdown from '@mui/joy/Dropdown';
 
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
+
 import SearchIcon from '@mui/icons-material/Search';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import BlockIcon from '@mui/icons-material/Block';
-import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
-const rows = [
-    {
-      dealerId: 'DLR-001',
-      dealerName: 'ABC Electronics',
-      location: 'New York',
-      contact: '+1-123-456-7890',
-      email: 'abc@example.com',
-      rating: 4.5,
-      speciality: 'Consumer Electronics',
-    },
-    {
-      dealerId: 'DLR-002',
-      dealerName: 'XYZ Furniture',
-      location: 'Los Angeles',
-      contact: '+1-987-654-3210',
-      email: 'xyz@example.com',
-      rating: 4.2,
-      speciality: 'Furniture',
-    },
-    {
-      dealerId: 'DLR-003',
-      dealerName: 'PQR Appliances',
-      location: 'Chicago',
-      contact: '+1-567-890-1234',
-      email: 'pqr@example.com',
-      rating: 4.7,
-      speciality: 'Home Appliances',
-    },
-    {
-      dealerId: 'DLR-004',
-      dealerName: 'LMN Books',
-      location: 'Houston',
-      contact: '+1-234-567-8901',
-      email: 'lmn@example.com',
-      rating: 4.3,
-      speciality: 'Books',
-    },
-    {
-      dealerId: 'DLR-005',
-      dealerName: 'EFG Fashion',
-      location: 'Miami',
-      contact: '+1-876-543-2109',
-      email: 'efg@example.com',
-      rating: 4.6,
-      speciality: 'Apparel',
-    },
-    {
-      dealerId: 'DLR-006',
-      dealerName: 'RST Home Decor',
-      location: 'San Francisco',
-      contact: '+1-321-098-7654',
-      email: 'rst@example.com',
-      rating: 4.4,
-      speciality: 'Home Decor',
-    },
-    {
-      dealerId: 'DLR-007',
-      dealerName: 'UVW Sports',
-      location: 'Seattle',
-      contact: '+1-789-012-3456',
-      email: 'uvw@example.com',
-      rating: 4.8,
-      speciality: 'Sporting Goods',
-    },
-    {
-      dealerId: 'DLR-008',
-      dealerName: 'GHI Automotive',
-      location: 'Boston',
-      contact: '+1-210-987-6543',
-      email: 'ghi@example.com',
-      rating: 4.1,
-      speciality: 'Automobiles',
-    },
-    {
-      dealerId: 'DLR-009',
-      dealerName: 'JKL Health',
-      location: 'Philadelphia',
-      contact: '+1-543-210-9876',
-      email: 'jkl@example.com',
-      rating: 4.9,
-      speciality: 'Health & Wellness',
-    },
-    {
-      dealerId: 'DLR-010',
-      dealerName: 'MNO Garden Supplies',
-      location: 'Atlanta',
-      contact: '+1-678-901-2345',
-      email: 'mno@example.com',
-      rating: 4.0,
-      speciality: 'Gardening',
-    },
-  ];
-  
 
-function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-const getComparator = (order, orderBy) => (
-    order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy)
-);
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
-function RowMenu() {
-    return (
-        <Dropdown>
-            <MenuButton
-                slots={{ root: IconButton }}
-                slotProps={{ root: { variant: 'plain', color: 'neutral', size: 'sm' } }}
-            >
-                <MoreHorizRoundedIcon />
-            </MenuButton>
-            <Menu size="sm" sx={{ minWidth: 140 }}>
-                <MenuItem>Edit</MenuItem>
-                <MenuItem>Rename</MenuItem>
-                <MenuItem>Move</MenuItem>
-                <Divider />
-                <MenuItem color="danger">Delete</MenuItem>
-            </Menu>
-        </Dropdown>
-    );
-}
+import { Modal, ModalDialog, Option, Select } from '@mui/joy';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+import moment from 'moment';
+
 function Dealer() {
-    const [order, setOrder] = useState('desc');
-    const [selected, setSelected] = useState([]);
-    const [open, setOpen] = useState(false);
-    const renderFilters = () => (
-        <React.Fragment>
-            <FormControl size="sm">
-                <FormLabel>Status</FormLabel>
-                <Select
-                    size="sm"
-                    placeholder="Filter by status"
-                    slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
-                >
-                    <Option value="paid">Paid</Option>
-                    <Option value="pending">Pending</Option>
-                    <Option value="refunded">Refunded</Option>
-                    <Option value="cancelled">Cancelled</Option>
-                </Select>
-            </FormControl>
-            <FormControl size="sm">
-                <FormLabel>Category</FormLabel>
-                <Select size="sm" placeholder="All">
-                    <Option value="all">All</Option>
-                    <Option value="refund">Refund</Option>
-                    <Option value="purchase">Purchase</Option>
-                    <Option value="debit">Debit</Option>
-                </Select>
-            </FormControl>
-            <FormControl size="sm">
-                <FormLabel>Customer</FormLabel>
-                <Select size="sm" placeholder="All">
-                    <Option value="all">All</Option>
-                    <Option value="olivia">Olivia Rhye</Option>
-                    <Option value="steve">Steve Hampton</Option>
-                    <Option value="ciaran">Ciaran Murray</Option>
-                    <Option value="marina">Marina Macdonald</Option>
-                    <Option value="charles">Charles Fulton</Option>
-                    <Option value="jay">Jay Hoper</Option>
-                </Select>
-            </FormControl>
-        </React.Fragment>
-    );
+    const [showModal, setShowModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
+    const [data, setData] = useState([]);
+    const [currentData, setCurrentData] = useState({});
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [selectAll, setSelectAll] = useState(false);
+    const [loader, setLoader] = useState(true);
+    const limit = 10;
+  
+    const [cityList, setCityList] = useState([]);
+    const [selectedRows, setSelectedRows] = useState([]);
+    
+  const getCities = () => {
+    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/city`)
+      .then((res) => {
+        setCityList(res.data.city);
+      })
+      .catch((err) => console.log(err))
+  };
+
+  useEffect(() => {
+    getCities();
+  }, [])
+
+
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+    if (!selectAll) {
+      // Select all rows
+      setSelectedRows(data?.map((country) => country._id));
+    } else {
+      // Deselect all rows
+      setSelectedRows([]);
+    }
+  };
+
+  const handleRowSelect = (countryId) => {
+    if (selectedRows.includes(countryId)) {
+      // Deselect the row
+      setSelectedRows(selectedRows.filter((id) => id !== countryId));
+    } else {
+      // Select the row
+      setSelectedRows([...selectedRows, countryId]);
+    }
+  };
+
+  const hanleCloseModal = () => {
+    setShowModal(prev => !prev);
+    setEditModal(false)
+    setCurrentData({})
+  };
+
+  const handleOpenModal = (country) => {
+    setCurrentData(country);
+    setEditModal(true)
+    setShowModal(true);
+  };
+
+  const handleFormData = (name, value) => {
+
+    setCurrentData(prev => {
+      return {
+        ...prev, [name]: value
+      }
+    })
+  }
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Delete Permanently?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`${process.env.REACT_APP_BASE_URL}/collections/customer/${id}`)
+          .then((res) => {
+            Swal.fire(
+              "Deleted!",
+              "Countrys has been deleted.",
+              "success"
+            )
+          }).then((res) => {
+            getData()
+          }).catch((error) => { console.log(error) })
+
+      }
+    })
+  }
+
+  const getData = () => {
+    setLoader(true)
+    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/customer?page=${page}&limit=${limit}`)
+      .then((res) => {
+        setLoader(false)
+        setData(res.data.customers)
+        setTotalPages(res.data.totalPages)
+      }).catch((error) => { 
+        setLoader(false)
+        console.log(error) 
+      })
+  }
+  useEffect(() => {
+    getData()
+  }, [])
+
+  useEffect(() => {
+    getData()
+  }, [page])
+
+  const handleSubmit = (id) => {
+    if (editModal && id) {
+      handleEditCountry(id)
+    }
+    else {
+      handleCreate()
+    }
+  }
+
+  const handleCreate = () => {
+    axios.post(`${process.env.REACT_APP_BASE_URL}/collections/customer`, currentData)
+      .then((res) => {
+        getData()
+      }).catch((error) => { console.log(error) })
+  }
+
+  const handleEditCountry = (id) => {
+    axios.put(`${process.env.REACT_APP_BASE_URL}/collections/customer/${id}`, currentData)
+      .then((res) => {
+        getData()
+      }).catch((error) => { console.log(error) })
+  }
+
+  const handlePreviousPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
     return (
-        <React.Fragment>
-            <Sheet
-                className="SearchAndFilters-mobile"
-                sx={{
-                    display: { xs: 'flex', sm: 'none' },
-                    my: 1,
-                    gap: 1,
-                }}
+        <>
+
+      {
+        loader?
+        <div className='flex items-center justify-center h-[60vh]'>
+
+
+        <span class="CustomLoader"></span>
+      </div>
+
+        :
+        <>
+        <div
+        className="flex items-center justify-between gap-3"
+
+      >
+        <div className='flex gap-3 justify-center'>
+          <FormControl sx={{ flex: 1 }} size="sm" >
+            <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} />
+          </FormControl>
+          <button onClick={hanleCloseModal} type="button" className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center me-2 mb-2">Search</button>
+
+        </div>
+        <div className='flex gap-3'>
+
+
+          <button onClick={hanleCloseModal} type="button" className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center  mb-2">Create</button>
+          <button type="button" className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center  mb-2">Filter</button>
+        </div>
+
+      </div>
+      {
+        selectedRows?.length > 0 && <div className='flex justify-center'>
+          <button type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 :focus:ring-red-800 font-medium rounded-[4px] text-sm px-5 py-2.5 text-center me-2 mb-2">Delete Selected</button>
+        </div>
+      }
+      <div className="relative w-full overflow-x-auto">
+
+        <table className="w-full  min-w-max caption-bottom text-sm">
+          <thead className="[&amp;_tr]:border-b bg-blue-700 ">
+            <tr className="border-b transition-colors  text-white hover:bg-muted/50 data-[state=selected]:bg-muted">
+              <th scope="col" className="p-4">
+                <div className="flex items-center">
+                  <input
+                    id="checkbox-all-search"
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                    checked={selectAll}
+                    onChange={handleSelectAll}
+                  />
+                  <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
+                </div>
+              </th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer Code (ID)</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer Name</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Hospital Name</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Street</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">City</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">PostalCode</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">District</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Region</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Country</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Telephone</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Tax Number1</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Tax Number2</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Email</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer Type</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Created Date</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Modified  Date</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Action</th>
+
+            </tr>
+          </thead>
+          <tbody className="[&amp;_tr:last-child]:border-0  ">
+            {data?.map((item, index) => (
+              <tr key={item?._id} className="border-b transition-colors  data-[state=selected]:bg-muted">
+                <th scope="col" className="p-4">
+                  <div className="flex items-center">
+                    <input
+                      id={`checkbox-${index}`}
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                      checked={selectedRows?.includes(item?._id)}
+                      onChange={() => handleRowSelect(item?._id)}
+                    />
+                    <label htmlFor={`checkbox-${index}`} className="sr-only">
+                      checkbox
+                    </label>
+                  </div>
+                </th>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.customercodeid}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.customername}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.hospitalname}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.street}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.city}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.postalcode}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.district}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.region}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.country}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.telephone}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.taxnumber1}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.taxnumber2}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.email}</td>
+
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">
+                  <span
+                    className={`text-xs font-medium px-2.5 py-0.5 rounded border ${item?.status === "Active"
+                      ? "bg-green-100 text-green-800 border-green-400"
+                      : item?.status === "Inactive"
+                        ? "bg-red-100 text-red-800  border-red-400"
+                        : "bg-orange-100 text-orange-800  border-orange-400"
+                      }`}
+                  >
+                    {item?.status}
+                  </span>
+                </td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.customertype}</td>
+
+                <td className="p-4 align-middle whitespace-nowrap">{moment(item?.createdAt).format('MMMM D, YYYY')}</td>
+                <td className="p-4 align-middle whitespace-nowrap">{moment(item?.modifiedAt).format('MMMM D, YYYY')}</td>
+
+
+                <td className="p-4 align-middle whitespace-nowrap">
+                  <div className='flex gap-4 '>
+                    <button onClick={() => { handleOpenModal(item) }} className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                      </svg>
+                    </button>
+                    <button onClick={() => handleDelete(item?._id)} className="border p-[7px] bg-blue-700 text-white rounded cursor-pointer hover:bg-blue-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash3-fill" viewBox="0 0 16 16">
+                        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="Pagination-laptopUp" style={{ display: 'flex', justifyContent: 'space-between', padding: '16px' }}>
+        <button
+            className={`border  rounded p-1 ${page === 1 ? 'cursor-not-allowed' : 'cursor-pointer'}   w-[100px] hover:bg-gray-300 px-2 bg-gray-100 font-semibold`}
+          onClick={handlePreviousPage}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map(p => (
+            <button
+              className={`border px-3 rounded ${p === page ? 'bg-blue-700 text-white' : ''}`}
+              key={p}
+              onClick={() => setPage(p)}
+              disabled={p === page}
             >
-                <Input
-                    size="sm"
-                    placeholder="Search"
-                    startDecorator={<SearchIcon />}
-                    sx={{ flexGrow: 1 }}
-                />
-                <IconButton
-                    size="sm"
-                    variant="outlined"
-                    color="neutral"
-                    onClick={() => setOpen("true")}
-                >
-                    <FilterAltIcon />
-                </IconButton>
-                <Modal open={open} onClose={() => setOpen(false)}>
-                    <ModalDialog aria-labelledby="filter-modal" layout="fullscreen">
-                        <ModalClose />
-                        <Typography id="filter-modal" level="h2">
-                            Filters
-                        </Typography>
-                        <Divider sx={{ my: 2 }} />
-                        <Sheet sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                            {renderFilters()}
-                            <Button color="primary" onClick={() => setOpen(false)}>
-                                Submit
-                            </Button>
-                        </Sheet>
-                    </ModalDialog>
-                </Modal>
-            </Sheet>
-            <Box
-                className="SearchAndFilters-tabletUp"
-                sx={{
-                    borderRadius: 'sm',
-                    py: 2,
-                    display: { xs: 'none', sm: 'flex' },
-                    flexWrap: 'wrap',
-                    gap: 1.5,
-                    '& > *': {
-                        minWidth: { xs: '120px', md: '160px' },
-                    },
-                }}
-            >
-                <FormControl sx={{ flex: 1 }} size="sm">
-                    <FormLabel>Search for order</FormLabel>
-                    <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} />
-                </FormControl>
-                {renderFilters()}
-            </Box>
-            <Sheet
-                className="OrderTableContainer"
-                variant="outlined"
-                sx={{
-                    // display: { xs: 'none', sm: 'initial' },
-                    width: '100%',
-                    borderRadius: 'sm',
-                    flexShrink: 1,
-                    overflow: 'auto',
-                    minHeight: 0,
-                }}
-            >
-                <Table
-                    aria-labelledby="tableTitle"
-                    stickyHeader
-                    hoverRow
-                    sx={{
-                        '--TableCell-headBackground': 'var(--joy-palette-background-level1)',
-                        '--Table-headerUnderlineThickness': '1px',
-                        '--TableRow-hoverBackground': 'var(--joy-palette-background-level1)',
-                        '--TableCell-paddingY': '4px',
-                        '--TableCell-paddingX': '8px',
-                    }}
-                >
-                    <thead>
-                        <tr>
-                            <th style={{ width: 48, textAlign: 'center', padding: '12px 6px' }}>
-                                <Checkbox
-                                    size="sm"
-                                    indeterminate={
-                                        selected.length > 0 && selected.length !== rows.length
-                                    }
-                                    checked={selected.length === rows.length}
-                                    onChange={(event) => {
-                                        setSelected(
-                                            event.target.checked ? rows.map((row) => row.id) : [],
-                                        );
-                                    }}
-                                    color={
-                                        selected.length > 0 || selected.length === rows.length
-                                            ? 'primary'
-                                            : undefined
-                                    }
-                                    sx={{ verticalAlign: 'text-bottom' }}
-                                />
-                            </th>
-                            <th style={{ width: 120, padding: '12px 6px' }}>
-                                <Link
-                                    underline="none"
-                                    color="primary"
-                                    component="button"
-                                    onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}
-                                    fontWeight="lg"
-                                    endDecorator={<ArrowDropDownIcon />}
-                                    sx={{
-                                        '& svg': {
-                                            transition: '0.2s',
-                                            transform:
-                                                order === 'desc' ? 'rotate(0deg)' : 'rotate(180deg)',
-                                        },
-                                    }}
-                                >
-                                    DealerId
-                                </Link>
-                            </th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>DealerName</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Location</th>
-                            <th style={{ width: 240, padding: '12px 6px' }}>Contact</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}> Email  </th>
-                            <th style={{ width: 140, padding: '12px 6px' }}> Rating  </th>
-                            <th style={{ width: 140, padding: '12px 6px' }}> Speciality  </th>
+              {p}
+            </button>
+          ))}
+        </div>
+        <button
+          className='border rounded p-1 cursor-pointer hover:bg-blue-500 px-2 bg-blue-700 w-[100px] text-white font-semibold'
+          onClick={handleNextPage}
+          disabled={page === totalPages}
+        >
+          Next
+        </button>
+      </div>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {stableSort(rows, getComparator(order, 'id')).map((row) => (
-                            <tr key={row.dealerId}>
-                                <td style={{ textAlign: 'center', width: 120 }}>
-                                    <Checkbox
-                                        size="sm"
-                                        checked={selected.includes(row.dealerId)}
-                                        color={selected.includes(row.dealerId) ? 'primary' : undefined}
-                                        onChange={(event) => {
-                                            setSelected((ids) =>
-                                                event.target.checked
-                                                    ? ids.concat(row.dealerId)
-                                                    : ids.filter((itemId) => itemId !== row.dealerId),
-                                            );
-                                        }}
-                                        slotProps={{ checkbox: { sx: { textAlign: 'left' } } }}
-                                        sx={{ verticalAlign: 'text-bottom' }}
-                                    />
-                                </td>
-                                <td>
-                                    <Typography level="body-xs">{row.dealerId}</Typography>
-                                </td>
-                                <td>
-                                    <Typography level="body-xs">{row.dealerName}</Typography>
-                                </td>
+      <Modal
+        open={showModal}
+        onClose={hanleCloseModal}
+        className="z-[1] thin-scroll"
+        size="lg"
+      >
 
-                                <td>
-                                    <Chip
-                                        variant="soft"
-                                        size="sm"
-                                        startDecorator={
-                                            {
-                                                Paid: <CheckRoundedIcon />,
-                                                Refunded: <AutorenewRoundedIcon />,
-                                                Cancelled: <BlockIcon />,
-                                            }[row.status]
-                                        }
-                                        color={
-                                            {
-                                                Paid: 'success',
-                                                Refunded: 'neutral',
-                                                Cancelled: 'danger',
-                                            }[row.status] || 'primary'
-                                        }
+        <ModalDialog size='lg' className="p-2  thin-scroll" >
+
+          <div className="flex items-start justify-between p-2 border-b px-5 border-solid border-blueGray-200 rounded-t thin-scroll">
+            <h3 className="text-2xl font-semibold">
+              {editModal ? (
+                "Update Country"
+              ) : (
+                "Create"
+              )}
+            </h3>
+            <div onClick={() => hanleCloseModal()} className=" border p-2 rounded-[4px] hover:bg-gray-200 cursor-pointer ">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-x-lg font-semibold "  viewBox="0 0 16 16" >
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+              </svg>
+            </div>
+
+          </div>
+
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            hanleCloseModal();
+          }} className="thin-scroll">
+
+            <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[400px] overflow-y-auto">
 
 
-
-                                    >
-                                        {row.location}
-                                    </Chip>
-                                </td>
-                                <td>
-                                    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                        {/* <Avatar size="sm">{row.customer.initial}</Avatar> */}
-                                        <div>
-                                            <Typography level="body-xs">{row.contact}</Typography>
-                                        </div>
-                                    </Box>
-                                </td>
-                                <td>
-                                    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                        {/* <Avatar size="sm">{row.customer.initial}</Avatar> */}
-                                        <div>
-                                            <Typography level="body-xs">{row.email}</Typography>
-                                        </div>
-                                    </Box>
-                                </td>
-                                <td>
-                                    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                        {/* <Avatar size="sm">{row.customer.initial}</Avatar> */}
-                                        <div>
-                                            <Typography level="body-xs">{row.rating}</Typography>
-                                        </div>
-                                    </Box>
-                                </td>
-                                <td>
-                                    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                        {/* <Avatar size="sm">{row.customer.initial}</Avatar> */}
-                                        <div>
-                                            <Typography level="body-xs">{row.speciality}</Typography>
-                                        </div>
-                                    </Box>
-                                </td>
+              <div class="grid md:grid-cols-2 md:gap-6 w-full">
 
 
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Customer Code (ID)</label>
+                  <input type="text" required  onChange={(e) => handleFormData('customercodeid', e.target.value)} id="name" value={currentData?.customercodeid} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div><div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Customer Name		</label>
+                  <input type="text" onChange={(e) => handleFormData('customername', e.target.value)} id="name" value={currentData?.customername} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div><div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Hospital Name		</label>
+                  <input type="text" onChange={(e) => handleFormData('hospitalname', e.target.value)} id="name" value={currentData?.hospitalname} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Street	</label>
+                  <input type="text" onChange={(e) => handleFormData('street', e.target.value)} id="name" value={currentData?.street} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2  text-sm font-medium text-gray-900 ">City	</label>
+                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.city || ""} onChange={(e, value) => handleFormData('city', value)}>
+                    <Option value="">Select</Option>
+                    {
+                      cityList.map((item) => <Option value={item?.name}>{item?.name}</Option>)
+                    }
+
+                  </Select>
+                </div><div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Postal Code	</label>
+                  <input type="text" onChange={(e) => handleFormData('postalcode', e.target.value)} id="name" value={currentData?.postalcode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div><div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">District	</label>
+                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Region	</label>
+                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Country	</label>
+                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Telephone	</label>
+                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Tax Number1		</label>
+                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Tax Number2		</label>
+                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Email		</label>
+                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Status</label>
+
+                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
+                    <Option value="">Select Status</Option>
+                    <Option value="Active">Active</Option>
+                    <Option value="Pending">Pending</Option>
+                    <Option value="Inactive">Inactive</Option>
+                  </Select>
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Customer Type			</label>
+                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+
+              </div>
 
 
+            </div>
+            <div className="flex items-center gap-3 justify-end mt-3 rounded-b">
 
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            </Sheet>
-            <Box
-                className="Pagination-laptopUp"
-                sx={{
-                    pt: 2,
-                    gap: 1,
-                    [`& .${iconButtonClasses.root}`]: { borderRadius: '50%' },
-                    display: {
-                        xs: 'none',
-                        md: 'flex',
-                    },
-                }}
-            >
-                <Button
-                    size="sm"
-                    variant="outlined"
-                    color="neutral"
-                    startDecorator={<KeyboardArrowLeftIcon />}
-                >
-                    Previous
-                </Button>
+              <button onClick={() => hanleCloseModal()} type="button" class=" focus:outline-none border h-8  shadow text-black flex items-center hover:bg-gray-200  font-medium rounded-[4px] text-sm px-5 py-2.5    me-2 mb-2">Close</button>
 
-                <Box sx={{ flex: 1 }} />
-                {['1', '2', '3', '…', '8', '9', '10'].map((page) => (
-                    <IconButton
-                        key={page}
-                        size="sm"
-                        variant={Number(page) ? 'outlined' : 'plain'}
-                        color="neutral"
-                    >
-                        {page}
-                    </IconButton>
-                ))}
-                <Box sx={{ flex: 1 }} />
+              <button onClick={() => handleSubmit(currentData?._id)} type="submit" className="text-white bg-blue-700 h-8 hover:bg-blue-800 focus:ring-4  flex items-center px-8 focus:ring-blue-300 font-medium rounded-[4px] text-sm  py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2">Save</button>
+            </div>
+          </form>
 
-                <Button
-                    size="sm"
-                    variant="outlined"
-                    color="neutral"
-                    endDecorator={<KeyboardArrowRightIcon />}
-                >
-                    Next
-                </Button>
-            </Box>
-        </React.Fragment>
+        </ModalDialog>
+      </Modal>
+        </>
+      }
+    </>
     );
 }
 
