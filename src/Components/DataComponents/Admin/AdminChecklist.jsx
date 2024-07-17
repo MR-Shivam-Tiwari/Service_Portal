@@ -247,8 +247,8 @@ const AdminChecklist = () => {
               </td>
       
 
-              <td className="p-4 align-middle whitespace-nowrap">{moment(i?.createdAt).format('MMMM D, YYYY')}</td>
-              <td className="p-4 align-middle whitespace-nowrap">{moment(i?.modifiedAt).format('MMMM D, YYYY')}</td>
+              <td className="p-4 align-middle whitespace-nowrap">{moment(i?.createdAt).format('MMM D, YYYY')}</td>
+              <td className="p-4 align-middle whitespace-nowrap">{moment(i?.modifiedAt).format('MMM D, YYYY')}</td>
               <td className="p-4  text-md capitalize align-middle whitespace-nowrap">{i?.resulttype}</td>
 
 

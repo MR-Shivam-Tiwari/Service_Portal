@@ -221,8 +221,8 @@ const AdminCountry = () => {
                     {country?.status}
                   </span>
                 </td>
-                <td className="p-4 align-middle whitespace-nowrap">{moment(country?.createdAt).format('MMMM D, YYYY')}</td>
-                <td className="p-4 align-middle whitespace-nowrap">{moment(country?.modifiedAt).format('MMMM D, YYYY')}</td>
+                <td className="p-4 align-middle whitespace-nowrap">{moment(country?.createdAt).format('MMM D, YYYY')}</td>
+                <td className="p-4 align-middle whitespace-nowrap">{moment(country?.modifiedAt).format('MMM D, YYYY')}</td>
 
 
                 <td className="p-4 align-middle whitespace-nowrap">

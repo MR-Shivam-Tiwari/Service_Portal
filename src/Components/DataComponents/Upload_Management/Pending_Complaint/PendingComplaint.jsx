@@ -277,8 +277,8 @@ function PendingComplaint() {
                 </span>
               </td>
 
-              <td className="p-4 align-middle whitespace-nowrap">{moment(item?.createdAt).format('MMMM D, YYYY')}</td>
-              <td className="p-4 align-middle whitespace-nowrap">{moment(item?.modifiedAt).format('MMMM D, YYYY')}</td>
+              <td className="p-4 align-middle whitespace-nowrap">{moment(item?.createdAt).format('MMM D, YYYY')}</td>
+              <td className="p-4 align-middle whitespace-nowrap">{moment(item?.modifiedAt).format('MMM D, YYYY')}</td>
 
 
               <td className="p-4 align-middle whitespace-nowrap">
