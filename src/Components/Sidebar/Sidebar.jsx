@@ -205,9 +205,7 @@ export default function Sidebar({ onSidebarItemClick }) {
                                 <ListItem>
                                     <ListItemButton onClick={() => navigate('/dealer')}>Dealer</ListItemButton>
                                 </ListItem>
-                                <ListItem>
-                                    <ListItemButton onClick={() => navigate('/branch')}>Branch</ListItemButton>
-                                </ListItem>
+                            
                             </List>
                         </Toggler>
                     </ListItem>
