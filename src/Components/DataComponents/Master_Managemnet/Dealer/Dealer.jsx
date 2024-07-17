@@ -13,19 +13,19 @@ import axios from 'axios';
 import moment from 'moment';
 
 function Dealer() {
-    const [showModal, setShowModal] = useState(false);
-    const [editModal, setEditModal] = useState(false);
-    const [data, setData] = useState([]);
-    const [currentData, setCurrentData] = useState({});
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [selectAll, setSelectAll] = useState(false);
-    const [loader, setLoader] = useState(true);
-    const limit = 10;
-  
-    const [cityList, setCityList] = useState([]);
-    const [selectedRows, setSelectedRows] = useState([]);
-    
+  const [showModal, setShowModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+  const [data, setData] = useState([]);
+  const [currentData, setCurrentData] = useState({});
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [selectAll, setSelectAll] = useState(false);
+  const [loader, setLoader] = useState(true);
+  const limit = 10;
+
+  const [cityList, setCityList] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
+
   const getCities = () => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/collections/city`)
       .then((res) => {
@@ -92,7 +92,7 @@ function Dealer() {
       confirmButtonText: "Yes, delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`${process.env.REACT_APP_BASE_URL}/collections/customer/${id}`)
+        axios.delete(`${process.env.REACT_APP_BASE_URL}/collections/dealer/${id}`)
           .then((res) => {
             Swal.fire(
               "Deleted!",
@@ -109,10 +109,10 @@ function Dealer() {
 
   const getData = () => {
     setLoader(true)
-    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/customer?page=${page}&limit=${limit}`)
+    axios.get(`${process.env.REACT_APP_BASE_URL}/collections/dealer?page=${page}&limit=${limit}`)
       .then((res) => {
         setLoader(false)
-        setData(res.data.customers)
+        setData(res.data.dealers)
         setTotalPages(res.data.totalPages)
       }).catch((error) => { 
         setLoader(false)
@@ -137,14 +137,14 @@ function Dealer() {
   }
 
   const handleCreate = () => {
-    axios.post(`${process.env.REACT_APP_BASE_URL}/collections/customer`, currentData)
+    axios.post(`${process.env.REACT_APP_BASE_URL}/collections/dealer`, currentData)
       .then((res) => {
         getData()
       }).catch((error) => { console.log(error) })
   }
 
   const handleEditCountry = (id) => {
-    axios.put(`${process.env.REACT_APP_BASE_URL}/collections/customer/${id}`, currentData)
+    axios.put(`${process.env.REACT_APP_BASE_URL}/collections/dealer/${id}`, currentData)
       .then((res) => {
         getData()
       }).catch((error) => { console.log(error) })
@@ -158,7 +158,7 @@ function Dealer() {
     if (page < totalPages) setPage(page + 1);
   };
     return (
-        <>
+      <>
 
       {
         loader?
@@ -211,23 +211,30 @@ function Dealer() {
                   <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
                 </div>
               </th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer Code (ID)</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer Name</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Hospital Name</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Street</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">City</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">PostalCode</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">District</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Region</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Country</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Telephone</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Tax Number1</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Tax Number2</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Name</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Email</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Mobile Number</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Branch</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Region</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Login Expiry Date</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Customer Type</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Dealer ID</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Person Responsible</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Country</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">State/Region</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">City</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Branch</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Pincode</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Department</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Password</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Created Date</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Modified  Date</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Modified Date</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Manager Email</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Skills</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Profile Image</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Device ID</th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Device Registered Date</th>
+             
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Action</th>
 
             </tr>
@@ -249,20 +256,13 @@ function Dealer() {
                     </label>
                   </div>
                 </th>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.customercodeid}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.customername}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.hospitalname}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.street}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.city}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.postalcode}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.district}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.region}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.country}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.telephone}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.taxnumber1}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.taxnumber2}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.name}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.email}</td>
-
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.mobilenumber}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.branch}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.region}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.loginexpirydate}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.district}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">
                   <span
                     className={`text-xs font-medium px-2.5 py-0.5 rounded border ${item?.status === "Active"
@@ -275,10 +275,25 @@ function Dealer() {
                     {item?.status}
                   </span>
                 </td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.customertype}</td>
-
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.dealerid}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.department}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.country}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.state}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.city}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.pincode}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.department}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.password}</td>
                 <td className="p-4 align-middle whitespace-nowrap">{moment(item?.createdAt).format('MMM D, YYYY')}</td>
                 <td className="p-4 align-middle whitespace-nowrap">{moment(item?.modifiedAt).format('MMM D, YYYY')}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.manageremail}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.skills}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.profileimage}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.deviceid}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.deviceregistereddate}</td>
+
+                
+
+                
 
 
                 <td className="p-4 align-middle whitespace-nowrap">
