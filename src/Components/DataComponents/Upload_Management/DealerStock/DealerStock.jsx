@@ -362,7 +362,7 @@ function DealerStock() {
 
                 </div><div className='relative  w-full mb-5 group'>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Dealer City		</label>
-                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.dealercity || ""} onChange={(e, value) => handleFormData('dealercity', value)}>
+                   <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.dealercity || ""} onChange={(e, value) => handleFormData('dealercity', value)}>
                     <Option value="">Select</Option>
                     {
                       cityList.map((item) => <Option value={item?.name}>{item?.name}</Option>)
@@ -393,7 +393,7 @@ function DealerStock() {
                 <div>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Status</label>
 
-                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
+                   <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
                     <Option value="">Select Status</Option>
                     <Option value="Active">Active</Option>
                     <Option value="Pending">Pending</Option>

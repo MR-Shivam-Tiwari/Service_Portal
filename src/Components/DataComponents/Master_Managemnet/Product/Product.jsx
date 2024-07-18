@@ -390,7 +390,7 @@ function Product() {
                                             </div>
                                             <div className='relative  w-full mb-5 group'>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 ">Ex-support avlb</label>
-                                                <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.exsupportavlb===true?"true":"false" || ""} onChange={(e, value) => handleFormData('exsupportavlb', value)}>
+                                                 <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.exsupportavlb===true?"true":"false" || ""} onChange={(e, value) => handleFormData('exsupportavlb', value)}>
                                                     <Option value="">Select </Option>
                                                     <Option value="true">True</Option>
                                                     <Option value="false">False</Option>
@@ -399,7 +399,7 @@ function Product() {
                                             </div>
                                             <div className='relative  w-full mb-5 group'>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 ">installation checklist Status </label>
-                                                <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.installationcheckliststatusboolean===true?"true":"false" || ""} onChange={(e, value) => handleFormData('installationcheckliststatusboolean', value)}>
+                                                 <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.installationcheckliststatusboolean===true?"true":"false" || ""} onChange={(e, value) => handleFormData('installationcheckliststatusboolean', value)}>
                                                     <Option value="">Select </Option>
                                                     <Option value="true">True</Option>
                                                     <Option value="false">False</Option>
@@ -407,7 +407,7 @@ function Product() {
                                             </div>
                                             <div className='relative  w-full mb-5 group'>
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 ">PM checklist Status </label>
-                                                <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.pmcheckliststatusboolean===true?"true":"false" || ""} onChange={(e, value) => handleFormData('pmcheckliststatusboolean', value)}>
+                                                 <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.pmcheckliststatusboolean===true?"true":"false" || ""} onChange={(e, value) => handleFormData('pmcheckliststatusboolean', value)}>
                                                     <Option value="">Select </Option>
                                                     <Option value="true">True</Option>
                                                     <Option value="false">False</Option>

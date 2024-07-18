@@ -255,7 +255,7 @@ export default function Sidebar({ onSidebarItemClick }) {
                             </List>
                         </Toggler>
                     </ListItem>
-                    <ListItem nested>
+                    {/* <ListItem nested>
                         <Toggler
                             renderToggle={({ open, setOpen }) => (
                                 <ListItemButton onClick={() => setOpen(!open)}>
@@ -300,7 +300,7 @@ export default function Sidebar({ onSidebarItemClick }) {
                                 </ListItem>
                             </List>
                         </Toggler>
-                    </ListItem>
+                    </ListItem> */}
                     <ListItem nested>
                         <Toggler
                             renderToggle={({ open, setOpen }) => (

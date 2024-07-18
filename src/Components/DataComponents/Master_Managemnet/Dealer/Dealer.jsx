@@ -223,7 +223,6 @@ function Dealer() {
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Country</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">State/Region</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">City</th>
-              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Branch</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Pincode</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Department</th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Password</th>
@@ -262,7 +261,6 @@ function Dealer() {
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.branch}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.region}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.loginexpirydate}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.district}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">
                   <span
                     className={`text-xs font-medium px-2.5 py-0.5 rounded border ${item?.status === "Active"
@@ -276,7 +274,7 @@ function Dealer() {
                   </span>
                 </td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.dealerid}</td>
-                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.department}</td>
+                <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.personresponsible}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.country}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.state}</td>
                 <td className="p-4 font- text-md capitalize align-middle whitespace-nowrap">{item?.city}</td>
@@ -383,76 +381,36 @@ function Dealer() {
 
 
                 <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Customer Code (ID)</label>
-                  <input type="text" required  onChange={(e) => handleFormData('customercodeid', e.target.value)} id="name" value={currentData?.customercodeid} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Name	</label>
+                  <input type="text" required  onChange={(e) => handleFormData('name', e.target.value)} id="name" value={currentData?.name} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Customer Name		</label>
-                  <input type="text" onChange={(e) => handleFormData('customername', e.target.value)} id="name" value={currentData?.customername} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Email	</label>
+                  <input type="text" onChange={(e) => handleFormData('email', e.target.value)} id="name" value={currentData?.email} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div><div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Hospital Name		</label>
-                  <input type="text" onChange={(e) => handleFormData('hospitalname', e.target.value)} id="name" value={currentData?.hospitalname} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Mobile Number	</label>
+                  <input type="text" onChange={(e) => handleFormData('mobilenumber', e.target.value)} id="name" value={currentData?.mobilenumber} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div>
                 <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Street	</label>
-                  <input type="text" onChange={(e) => handleFormData('street', e.target.value)} id="name" value={currentData?.street} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Branch		</label>
+                  <input type="text" onChange={(e) => handleFormData('branch', e.target.value)} id="name" value={currentData?.branch} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div>
 
                 <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2  text-sm font-medium text-gray-900 ">City	</label>
-                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.city || ""} onChange={(e, value) => handleFormData('city', value)}>
-                    <Option value="">Select</Option>
-                    {
-                      cityList.map((item) => <Option value={item?.name}>{item?.name}</Option>)
-                    }
-
-                  </Select>
+                  <label class="block mb-2  text-sm font-medium text-gray-900 ">Region	</label>
+                  <input type="text" onChange={(e) => handleFormData('region', e.target.value)} id="name" value={currentData?.region} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  
                 </div><div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Postal Code	</label>
-                  <input type="text" onChange={(e) => handleFormData('postalcode', e.target.value)} id="name" value={currentData?.postalcode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Login Expiry Date		</label>
+                  <input type="text" onChange={(e) => handleFormData('loginexpirydate', e.target.value)} id="name" value={currentData?.loginexpirydate} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
-                </div><div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">District	</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Region	</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Country	</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Telephone	</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Tax Number1		</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Tax Number2		</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Email		</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                </div>
-                <div>
+                </div> <div>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Status</label>
 
-                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
+                   <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
                     <Option value="">Select Status</Option>
                     <Option value="Active">Active</Option>
                     <Option value="Pending">Pending</Option>
@@ -460,8 +418,69 @@ function Dealer() {
                   </Select>
                 </div>
                 <div className='relative  w-full mb-5 group'>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Customer Type			</label>
-                  <input type="text" onChange={(e) => handleFormData('district', e.target.value)} id="name" value={currentData?.district} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Dealer ID		</label>
+                  <input type="text" onChange={(e) => handleFormData('dealerid', e.target.value)} id="name" value={currentData?.dealerid} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Person Responsible		</label>
+                  <input type="text" onChange={(e) => handleFormData('personresponsible', e.target.value)} id="name" value={currentData?.personresponsible} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Country		</label>
+                  <input type="text" onChange={(e) => handleFormData('country', e.target.value)} id="name" value={currentData?.country} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+               
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">State/Region	</label>
+                  <input type="text" onChange={(e) => handleFormData('state', e.target.value)} id="name" value={currentData?.state} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">City	</label>
+                  <input type="text" onChange={(e) => handleFormData('city', e.target.value)} id="name" value={currentData?.city} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Pincode	</label>
+                  <input type="text" onChange={(e) => handleFormData('pincode', e.target.value)} id="name" value={currentData?.pincode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Department	</label>
+                  <input type="text" onChange={(e) => handleFormData('department', e.target.value)} id="name" value={currentData?.department} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Password	</label>
+                  <input type="text" onChange={(e) => handleFormData('password', e.target.value)} id="name" value={currentData?.password} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Manager Email		</label>
+                  <input type="text" onChange={(e) => handleFormData('manageremail', e.target.value)} id="name" value={currentData?.manageremail} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Skills</label>
+                  <input type="text" onChange={(e) => handleFormData('skills', e.target.value)} id="name" value={currentData?.skills} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Profile Image	</label>
+                  <input type="text" onChange={(e) => handleFormData('profileimage', e.target.value)} id="name" value={currentData?.profileimage} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Device ID	</label>
+                  <input type="text" onChange={(e) => handleFormData('deviceid', e.target.value)} id="name" value={currentData?.deviceid} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                </div>
+                <div className='relative  w-full mb-5 group'>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 ">Device Registered Date	</label>
+                  <input type="text" onChange={(e) => handleFormData('deviceregistereddate', e.target.value)} id="name" value={currentData?.deviceregistereddate} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                 </div>
 

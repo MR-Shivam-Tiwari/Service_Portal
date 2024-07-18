@@ -388,7 +388,7 @@ function Customer() {
 
                 <div className='relative  w-full mb-5 group'>
                   <label class="block mb-2  text-sm font-medium text-gray-900 ">City	</label>
-                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.city || ""} onChange={(e, value) => handleFormData('city', value)}>
+                   <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.city || ""} onChange={(e, value) => handleFormData('city', value)}>
                     <Option value="">Select</Option>
                     {
                       cityList.map((item) => <Option value={item?.name}>{item?.name}</Option>)
@@ -437,7 +437,7 @@ function Customer() {
                 <div>
                   <label class="block mb-2 text-sm font-medium text-gray-900 ">Status</label>
 
-                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
+                   <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
                     <Option value="">Select Status</Option>
                     <Option value="Active">Active</Option>
                     <Option value="Pending">Pending</Option>

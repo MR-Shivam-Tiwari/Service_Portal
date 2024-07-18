@@ -282,7 +282,7 @@ const AdminCity = () => {
           e.preventDefault();
           handleCloseModal();
         }} className="">
-          <div className="relative  border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[400px] overflow-y-auto">
+          <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[400px] overflow-y-auto">
 
 
 
@@ -292,7 +292,7 @@ const AdminCity = () => {
                 <label class="peer-focus:font-medium absolute text-sm text-gray-500 :text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus::text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Country Name</label>
               </div>
               <div>
-                <Select variant='soft' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
+                 <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
                   <Option value="">Select Status</Option>
                   <Option value="Active">Active</Option>
                   <Option value="Pending">Pending</Option>
@@ -302,7 +302,7 @@ const AdminCity = () => {
              
             </div>
             <div>
-                <Select variant='soft' defaultValue={currentData?.state || ""} onChange={(e, value) => handleFormData('state', value)}>
+                 <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.state || ""} onChange={(e, value) => handleFormData('state', value)}>
                   <Option value="">Select Country</Option>
                   {
                     stateList?.map((i) => (
@@ -317,9 +317,9 @@ const AdminCity = () => {
           </div>
           <div className="flex items-center justify-end mt-3 rounded-b">
 
-            <button onClick={() => handleCloseModal()} type="button" class="text-white bg-gradient-to-r from-red-300 via-red-500 to-red-600 hover:bg-gradient-to-br  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Close</button>
+            <button onClick={() => handleCloseModal()} type="button" class="focus:outline-none border h-8  shadow text-black flex items-center hover:bg-gray-200  font-medium rounded-[4px] text-sm px-5 py-2.5    me-2 mb-2">Close</button>
 
-            <button onClick={() => handleSubmit(currentData?._id)} type="submit" className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Save Country</button>
+            <button onClick={() => handleSubmit(currentData?._id)} type="submit" className="text-white bg-blue-700 h-8 hover:bg-blue-800 focus:ring-4  flex items-center px-8 focus:ring-blue-300 font-medium rounded-[4px] text-sm  py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2">Save Country</button>
           </div>
         </form>
 
