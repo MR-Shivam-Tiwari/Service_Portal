@@ -197,9 +197,9 @@ const AdminRoles = () => {
               </div>
             </th>
             <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Name</th>
-            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">State</th>
-            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">City</th>
-            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Branch Short Code</th>
+            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Parent Role</th>
+            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Feature Access</th>
+            <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Feature CRUD Access</th>
             <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
             <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Created Date</th>
             <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Modified  Date</th>
@@ -223,14 +223,24 @@ const AdminRoles = () => {
                 </div>
               </th>
               <td className="p-4 font-bold text-md capitalize align-middle whitespace-nowrap">{i?.name}</td>
-              <td className="p-4  text-md capitalize align-middle whitespace-nowrap">{i?.state}</td>
-              <td className="p-4  text-md capitalize align-middle whitespace-nowrap">{i?.city}</td>
-              <td className="p-4  text-md capitalize align-middle whitespace-nowrap">{i?.branchShortCode}</td>
-              <td>
+              <td className="p-4  text-md capitalize align-middle whitespace-nowrap">{i?.parentRole}</td>
+              <td className="p-4  text-md capitalize align-middle whitespace-nowrap">{i?.featureName}</td>
+              <td className="p-4  text-md capitalize align-middle whitespace-nowrap">
+                  All :{i.featureCrudAccess?.all?"True":"False"}
+                  <br/>
+                  Read :{i.featureCrudAccess?.read?"True":"False"}
+                  <br/>
+
+                  Write :{i.featureCrudAccess?.write?"True":"False"}
+                  <br/>
+
+                  Delete :{i.featureCrudAccess?.delete?"True":"False"}
+              </td>
+              <td className='capitalize p-4'>
                 <span
-                  className={`text-xs font-medium px-2.5 py-0.5 rounded border ${i?.status === "Active"
+                  className={`text-xs font-medium px-2.5 py-0.5 rounded border ${i?.status === "active"
                     ? "bg-green-100 text-green-800 border-green-400"
-                    : i?.status === "Inactive"
+                    : i?.status === "inactive"
                       ? "bg-red-100 text-red-800  border-red-400"
                       : "bg-orange-100 text-orange-800  border-orange-400"
                     }`}
@@ -320,48 +330,31 @@ const AdminRoles = () => {
 
 
             <div class="relative z-0 w-full mb-5 group">
-              <input onChange={(e) => handleFormData('name', e.target.value)} type="text" name="name" id="name" value={currentData?.name} class="block py-2.5 px-0 w-full font-bold text-md text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none :text-white :border-gray-600 :focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-              <label class="peer-focus:font-medium absolute text-sm text-gray-500 :text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus::text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Branch Name</label>
+              <label class="block mb-2 text-sm font-medium text-gray-900">Name</label>
+              <input onChange={(e) => handleFormData('name', e.target.value)} type="text" name="name" id="name" value={currentData?.name} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
             </div>
             <div class="grid md:grid-cols-2 md:gap-6">
               <div class="relative z-0 w-full mb-5 group">
-                <input onChange={(e) => handleFormData('branchShortCode', e.target.value)} type="text" name="name" id="name" value={currentData?.branchShortCode} class="block py-2.5 px-0 w-full font-bold text-md text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none :text-white :border-gray-600 :focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                <label class="peer-focus:font-medium absolute text-sm text-gray-500 :text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus::text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Branch Short Code</label>
+                <label class="block mb-2 text-sm font-medium text-gray-900">Parent Role</label>
+                <input onChange={(e) => handleFormData('parentRole', e.target.value)} type="text" name="name" id="name" value={currentData?.parentRole} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Feature Access</label>
+                <input onChange={(e) => handleFormData('featureName', e.target.value)} type="text" name="name" id="name" value={currentData?.featureName} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
               </div>
               <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900">Status</label>
+
                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
                   <Option value="">Select Status</Option>
-                  <Option value="Active">Active</Option>
-                  <Option value="Pending">Pending</Option>
-                  <Option value="Inactive">Inactive</Option>
+                  <Option value="active">Active</Option>
+                  <Option value="inactive">Inactive</Option>
                 </Select>
               </div>
 
             </div>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-              <div>
-                 <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.state || ""} onChange={(e, value) => handleFormData('state', value)}>
-                  <Option value="">Select State</Option>
-                  {
-                    stateList?.map((i) => (
-                      <Option value={i?.name}>{i?.name}</Option>
-                    ))
-                  }
-
-                </Select>
-              </div>
-              <div>
-                 <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.city || ""} onChange={(e, value) => handleFormData('city', value)}>
-                  <Option value="">Select City</Option>
-                  {
-                    cityList?.map((i) => (
-                      <Option value={i?.name}>{i?.name}</Option>
-                    ))
-                  }
-
-                </Select>
-              </div>
-            </div>
+            
+             
 
 
           </div>

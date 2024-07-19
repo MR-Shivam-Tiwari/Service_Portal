@@ -331,10 +331,12 @@ const AdminState = () => {
 
         <div class="grid md:grid-cols-2 md:gap-6">
           <div class="relative z-0 w-full mb-5 group">
-            <input onChange={(e) => handleFormData('name', e.target.value)} type="text" name="name" id="name" value={currentData?.name} class="block py-2.5 px-0 w-full font-bold text-md text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none :text-white :border-gray-600 :focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-            <label class="peer-focus:font-medium absolute text-sm text-gray-500 :text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus::text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Country Name</label>
+            <label class="block mb-2 text-sm font-medium text-gray-900">Country Name</label>
+            <input onChange={(e) => handleFormData('name', e.target.value)} type="text" name="name" id="name" value={currentData?.name} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
           </div>
           <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900">Select Status</label>
+
              <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
               <Option value="">Select Status</Option>
               <Option value="Active">Active</Option>
@@ -345,6 +347,8 @@ const AdminState = () => {
          
         </div>
         <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900">Select Country</label>
+
              <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.country || ""} onChange={(e, value) => handleFormData('country', value)}>
               <Option value="">Select Country</Option>
               {
@@ -358,7 +362,6 @@ const AdminState = () => {
 
 
       </div>
-      <img src={'https://img.freepik.com/premium-vector/hand-drawn-illustration-lab-assistant_67813-3188.jpg?w=740'}/>
       <div className="flex items-center justify-end mt-3 rounded-b">
 
         <button onClick={() => handleCloseModal()} type="button" class="focus:outline-none border h-8  shadow text-black flex items-center hover:bg-gray-200  font-medium rounded-[4px] text-sm px-5 py-2.5    me-2 mb-2">Close</button>

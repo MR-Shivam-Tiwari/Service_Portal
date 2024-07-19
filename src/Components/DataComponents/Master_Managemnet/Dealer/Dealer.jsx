@@ -60,7 +60,7 @@ function Dealer() {
     }
   };
 
-  const hanleCloseModal = () => {
+  const handleCloseModal = () => {
     setShowModal(prev => !prev);
     setEditModal(false)
     setCurrentData({})
@@ -178,13 +178,13 @@ function Dealer() {
           <FormControl sx={{ flex: 1 }} size="sm" >
             <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} />
           </FormControl>
-          <button onClick={hanleCloseModal} type="button" className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center me-2 mb-2">Search</button>
+          <button onClick={handleCloseModal} type="button" className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center me-2 mb-2">Search</button>
 
         </div>
         <div className='flex gap-3'>
 
 
-          <button onClick={hanleCloseModal} type="button" className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center  mb-2">Create</button>
+          <button onClick={handleCloseModal} type="button" className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center  mb-2">Create</button>
           <button type="button" className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center  mb-2">Filter</button>
         </div>
 
@@ -346,7 +346,7 @@ function Dealer() {
 
       <Modal
         open={showModal}
-        onClose={hanleCloseModal}
+        onClose={handleCloseModal}
         className="z-[1] thin-scroll"
         size="lg"
       >
@@ -361,7 +361,7 @@ function Dealer() {
                 "Create"
               )}
             </h3>
-            <div onClick={() => hanleCloseModal()} className=" border p-2 rounded-[4px] hover:bg-gray-200 cursor-pointer ">
+            <div onClick={() => handleCloseModal()} className=" border p-2 rounded-[4px] hover:bg-gray-200 cursor-pointer ">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-x-lg font-semibold "  viewBox="0 0 16 16" >
                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
               </svg>
@@ -371,7 +371,7 @@ function Dealer() {
 
           <form onSubmit={(e) => {
             e.preventDefault();
-            hanleCloseModal();
+            handleCloseModal();
           }} className="thin-scroll">
 
             <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[400px] overflow-y-auto">
@@ -490,7 +490,7 @@ function Dealer() {
             </div>
             <div className="flex items-center gap-3 justify-end mt-3 rounded-b">
 
-              <button onClick={() => hanleCloseModal()} type="button" class=" focus:outline-none border h-8  shadow text-black flex items-center hover:bg-gray-200  font-medium rounded-[4px] text-sm px-5 py-2.5    me-2 mb-2">Close</button>
+              <button onClick={() => handleCloseModal()} type="button" class=" focus:outline-none border h-8  shadow text-black flex items-center hover:bg-gray-200  font-medium rounded-[4px] text-sm px-5 py-2.5    me-2 mb-2">Close</button>
 
               <button onClick={() => handleSubmit(currentData?._id)} type="submit" className="text-white bg-blue-700 h-8 hover:bg-blue-800 focus:ring-4  flex items-center px-8 focus:ring-blue-300 font-medium rounded-[4px] text-sm  py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2">Save</button>
             </div>

@@ -349,11 +349,58 @@ const AdminPM_Master = () => {
 
             <div class="grid md:grid-cols-2 md:gap-6">
               <div class="relative z-0 w-full mb-5 group">
-                <input onChange={(e) => handleFormData('name', e.target.value)} type="text" name="name" id="name" value={currentData?.name} class="block py-2.5 px-0 w-full font-bold text-md text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none :text-white :border-gray-600 :focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                <label class="peer-focus:font-medium absolute text-sm text-gray-500 :text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus::text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Name</label>
+                <label class="block mb-2 text-sm font-medium text-gray-900">PM Type	</label>
+                <input onChange={(e) => handleFormData('pmtype', e.target.value)} type="text"  value={currentData?.pmtype} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
               </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Number</label>
+                <input onChange={(e) => handleFormData('pmumber', e.target.value)} type="text"  value={currentData?.pmumber} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Document Number	</label>
+                <input onChange={(e) => handleFormData('documentnumber', e.target.value)} type="text"  value={currentData?.documentnumber} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Material Description	</label>
+                <input onChange={(e) => handleFormData('materialdescription', e.target.value)} type="text"  value={currentData?.materialdescription} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Serial number	</label>
+                <input onChange={(e) => handleFormData('serialnumber', e.target.value)} type="text"  value={currentData?.serialnumber} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Customer Code	</label>
+                <input onChange={(e) => handleFormData('customercode', e.target.value)} type="text"  value={currentData?.customercode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Region</label>
+                <input onChange={(e) => handleFormData('region', e.target.value)} type="text"  value={currentData?.region} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">PM due month	</label>
+                <input onChange={(e) => handleFormData('pmduemonth', e.target.value)} type="text"  value={currentData?.pmduemonth} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">PM done Date	</label>
+                <input onChange={(e) => handleFormData('pmdonedate', e.target.value)} type="text"  value={currentData?.pmdonedate} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">PM Vendor Code	</label>
+                <input onChange={(e) => handleFormData('pmvendorcode', e.target.value)} type="text"  value={currentData?.pmvendorcode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">PM Engineer Code	</label>
+                <input onChange={(e) => handleFormData('pmengineercode', e.target.value)} type="text"  value={currentData?.pmengineercode} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">PM Status	</label>
+                <input onChange={(e) => handleFormData('pmstatus', e.target.value)} type="text"  value={currentData?.pmstatus} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              
 
               <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900">Status</label>
+
                  <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.status || ""} onChange={(e, value) => handleFormData('status', value)}>
                   <Option value="">Select Status</Option>
                   <Option value="Active">Active</Option>
@@ -361,19 +408,18 @@ const AdminPM_Master = () => {
                   <Option value="Inactive">Inactive</Option>
                 </Select>
               </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Assigned To	</label>
+                <input onChange={(e) => handleFormData('assignedto', e.target.value)} type="text"  value={currentData?.assignedto} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+              <div class="relative z-0 w-full mb-5 group">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Assigned By	</label>
+                <input onChange={(e) => handleFormData('assignedby', e.target.value)} type="text"  value={currentData?.assignedby} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
+              </div>
+           
 
             </div>
-            <div class="mt-6">
-               <Select variant='soft' className='rounded-[4px] py-2 border' defaultValue={currentData?.role || ""} onChange={(e, value) => handleFormData('roles', value)}>
-                <Option value="">Select Role</Option>
-                {
-                  roleList?.map((i) => (
-                    <Option value={i?.name}>{i?.name}</Option>
-                  ))
-                }
-
-              </Select>
-            </div>
+            
 
 
 
