@@ -141,7 +141,8 @@ const AdminCity = () => {
   return (
    <>
     {
-      loader?<div className='flex items-center justify-center h-[60vh]'>
+      loader?
+      <div className='flex items-center justify-center h-[60vh]'>
 
 
         <span class="CustomLoader"></span>
