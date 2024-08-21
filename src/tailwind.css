@@ -5,7 +5,7 @@
 
 /* Customize scrollbar */
 ::-webkit-scrollbar {
-    width: 6px;  /* Vertical scrollbar width */
+    width: 3px;  /* Vertical scrollbar width */
     border-radius: 0px;
   }
     

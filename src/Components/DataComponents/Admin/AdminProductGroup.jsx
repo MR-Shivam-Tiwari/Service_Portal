@@ -183,7 +183,7 @@ const AdminProductGroup = () => {
 
     <div className="relative w-full overflow-x-auto">
 
-      <table className="w-full  min-w-max caption-bottom text-sm">
+      <table className="w-full  border  min-w-max caption-bottom text-sm">
         <thead className="[&amp;_tr]:border-b bg-blue-700 ">
           <tr className="border-b transition-colors  text-white hover:bg-muted/50 data-[state=selected]:bg-muted">
             <th scope="col" className="p-4">

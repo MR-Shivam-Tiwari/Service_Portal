@@ -5,7 +5,7 @@ import Box from '@mui/joy/Box';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 import Link from '@mui/joy/Link';
 import Typography from '@mui/joy/Typography';
-import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
 
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
@@ -44,10 +44,16 @@ import AdminProductGroup from './Components/DataComponents/Admin/AdminProductGro
 import AdminChecklist from './Components/DataComponents/Admin/AdminChecklist';
 import AdminPM_Master from './Components/DataComponents/Admin/AdminPM_Master';
 import AdminRoles from './Components/DataComponents/Admin/AdminRoles';
+import Login from './Components/Auth/Login';
+
 export default function App() {
   return (
     <Router>
-      <AppContent />
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/*" element={<AppContent />} />
+      </Routes>
     </Router>
   );
 }
@@ -57,30 +63,19 @@ function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   navigate('/user');
-  // }, []); 
-  // Empty dependency array ensures the effect runs only once on component mount
-
   const handleRouteChange = () => {
-    // Assuming your routes are in the format "/orders" or "/order-list"
     const routeName = location.pathname.split('/').pop().replace(/-/g, ' ');
     setCurrentRouteName(routeName.charAt(0).toUpperCase() + routeName.slice(1));
   };
 
   useEffect(() => {
-    // Call handleRouteChange initially and add listener for subsequent changes
     handleRouteChange();
-    return () => {
-      // Clean up listener when component unmounts
-    };
   }, [location.pathname]);
+
   const [activeComponent, setActiveComponent] = useState('');
 
   const handleSidebarItemClick = (componentName) => {
     setActiveComponent(componentName);
-    // Do whatever you need to do when a sidebar item is clicked
-    // For example, update the active component in the state
   };
 
   const handleItemClick = (route) => {
@@ -94,16 +89,14 @@ function AppContent() {
         <Header />
         <Sidebar onSidebarItemClick={handleSidebarItemClick} />
         <Box
-          component=""
-          className=" "
           sx={{
-            px: { xs: 2, md: 6 },
+            px: { xs: 2, md: 2 },
             pt: {
               xs: 'calc(12px + var(--Header-height))',
               sm: 'calc(12px + var(--Header-height))',
-              md: 3,
+              md: 1,
             },
-            pb: { xs: 2, sm: 2, md: 3 },
+            pb: { xs: 2, sm: 2, md: 0 },
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
@@ -138,7 +131,7 @@ function AppContent() {
                 >
                   <HomeRoundedIcon />
                 </Link>
-                <Link
+                {/* <Link
                   underline="hover"
                   color="neutral"
                   href="#some-link"
@@ -146,16 +139,15 @@ function AppContent() {
                   fontWeight={500}
                 >
                   Dashboard
-                </Link>
+                </Link> */}
                 <Typography color="primary" fontWeight={500} fontSize={12}>
                   {currentRouteName}
                 </Typography>
               </Breadcrumbs>
             </Box>
-            <Typography sx={{textTransform:'capitalize'}} level="h2" component="h1">
+            {/* <Typography className='' sx={{ textTransform: 'capitalize' }} level="h3" component="h1">
               {currentRouteName}
-            </Typography>
-
+            </Typography> */}
           </Box>
 
           <Routes onChange={handleRouteChange}>
@@ -186,17 +178,14 @@ function AppContent() {
             <Route path="/new-customer" element={<NewCustomer />} />
             <Route path="/amc-contract" element={<AmcContract />} />
             <Route path="/customer" element={<Customer />} />
-            <Route path="/dealer-stock" element={< DealerStock/>} />
-            <Route path="/hub-stock" element={< HubStock/>} />
-            <Route path="/pending-complaint" element={< PendingComplaint/>} />
-            <Route path="/pending-installation" element={< PendingInstallation/>} />
-            <Route path="/pending-installation" element={< PendingInstallation/>} />
+            <Route path="/dealer-stock" element={< DealerStock />} />
+            <Route path="/hub-stock" element={< HubStock />} />
+            <Route path="/pending-complaint" element={< PendingComplaint />} />
+            <Route path="/pending-installation" element={< PendingInstallation />} />
             <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/user-login" element={<UserLogin />} />
             <Route path="/order-list" element={<OrderTable />} />
-
           </Routes>
-
         </Box>
       </Box>
     </CssVarsProvider>
