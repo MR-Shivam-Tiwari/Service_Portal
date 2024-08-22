@@ -6,14 +6,16 @@ import Input from "@mui/joy/Input";
 
 import SearchIcon from "@mui/icons-material/Search";
 
-import { Modal, ModalDialog, Option, Select } from "@mui/joy";
+import { Autocomplete, Modal, ModalDialog, Option, Select, TextField } from "@mui/joy";
 import Swal from "sweetalert2";
 import axios from "axios";
 import moment from "moment";
+import SelectBoxWithSearch from "../../../SelectBoxWithSearch";
 const UserData = () => {
   const [showModal, setShowModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [data, setData] = useState([]);
+  const [BranchData, setBranchData] = useState([]);
   const [currentData, setCurrentData] = useState({});
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -22,20 +24,63 @@ const UserData = () => {
   const limit = 10;
 
   const [cityList, setCityList] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
-
-  const getCities = () => {
-    axios
-      .get(`${process.env.REACT_APP_BASE_URL}/collections/city`)
-      .then((res) => {
-        setCityList(res.data.city);
-      })
-      .catch((err) => console.log(err));
-  };
 
   useEffect(() => {
+    const getCities = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/collections/city`
+        );
+        const cities = res.data.city.map((city) => ({
+          label: city.name,
+          id: city._id,
+          state: city.state,
+          status: city.status,
+        }));
+        setCityList(cities);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     getCities();
   }, []);
+  useEffect(() => {
+    const getBranch = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/collections/branch`
+        );
+        const cities = res.data.branches.map((branches) => ({
+          label: branches.name,
+          id: branches._id,
+          state: branches.state,
+          status: branches.status,
+          city: branches.city,
+          branchShortCode: branches.branchShortCode,
+        }));
+        setCityList(cities);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getBranch();
+  }, []);
+
+
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  // const getBranch = () => {
+  //   axios
+  //     .get(`${process.env.REACT_APP_BASE_URL}/collections/branch`)
+  //     .then((res) => {
+  //       setBranchData(res.data.branches);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+
+ 
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -121,6 +166,7 @@ const UserData = () => {
         console.log(error);
       });
   };
+
   useEffect(() => {
     getData();
   }, []);
@@ -492,7 +538,7 @@ const UserData = () => {
             size="lg"
           >
             <ModalDialog size="lg" className="p-2  thin-scroll">
-              <div className="flex items-start justify-between p-2 border-b px-5 border-solid border-blueGray-200 rounded-t thin-scroll">
+              <div className="flex items-start justify-between p-2  px-5 border-solid border-blueGray-200 rounded-t thin-scroll">
                 <h3 className="text-2xl font-semibold">
                   {editModal ? "Update" : "Create"}
                 </h3>
@@ -520,7 +566,7 @@ const UserData = () => {
                 }}
                 className="thin-scroll"
               >
-                <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[400px] overflow-y-auto">
+                <div className=" w-[300px] md:w-[500px]  lg:w-[700px] border-y  border-solid border-blueGray-200 p-3 flex-auto max-h-[380px] overflow-y-auto">
                   <div class="grid md:grid-cols-2 md:gap-6 w-full">
                     <div className="relative  w-full mb-5 group">
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
@@ -581,20 +627,6 @@ const UserData = () => {
                     </div>
 
                     <div className="relative  w-full mb-5 group">
-                      <label class="block mb-2  text-sm font-medium text-gray-900 ">
-                        Branch{" "}
-                      </label>
-                      <input
-                        type="text"
-                        onChange={(e) =>
-                          handleFormData("branch", e.target.value)
-                        }
-                        id="name"
-                        value={currentData?.branch}
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="relative  w-full mb-5 group">
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
                         Login Expiry Date{" "}
                       </label>
@@ -643,7 +675,7 @@ const UserData = () => {
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
                         Country{" "}
                       </label>
-                      <input
+                      {/* <input
                         type="text"
                         onChange={(e) =>
                           handleFormData("country", e.target.value)
@@ -651,6 +683,19 @@ const UserData = () => {
                         id="name"
                         value={currentData?.country}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      /> */}
+                      {/* <SelectBoxWithSearch
+                        options={cityList} // Pass the entire cityList
+                        placeholder="Select a city"
+                        onSelect={handleSelectCity}
+                      /> */}
+                      <Autocomplete
+                        options={cityList}
+                        getOptionLabel={(option) => option.label}
+                        renderInput={(params) => (
+                          <TextField {...params} label="Combo box" />
+                        )}
+                        sx={{ width: 300 }}
                       />
                     </div>
                     <div className="relative  w-full mb-5 group">
@@ -683,7 +728,7 @@ const UserData = () => {
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
                         Branch{" "}
                       </label>
-                      <input
+                      {/* <input
                         type="text"
                         onChange={(e) =>
                           handleFormData("branch", e.target.value)
@@ -691,6 +736,14 @@ const UserData = () => {
                         id="name"
                         value={currentData?.branch}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      /> */}
+                     <Autocomplete
+                        options={BranchData}
+                        getOptionLabel={(option) => option.label}
+                        renderInput={(params) => (
+                          <TextField {...params} label="Combo box" />
+                        )}
+                        sx={{ width: 300 }}
                       />
                     </div>
 

@@ -342,7 +342,7 @@ const AdminPM_Master = () => {
 
         <form onSubmit={(e) => {
           e.preventDefault();
-          handleCloseModal();
+          handleCloseModal(); 
         }} className="">
           <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[400px] overflow-y-auto gap-6">
 
@@ -351,7 +351,7 @@ const AdminPM_Master = () => {
               <div class="relative z-0 w-full mb-5 group">
                 <label class="block mb-2 text-sm font-medium text-gray-900">PM Type	</label>
                 <input onChange={(e) => handleFormData('pmtype', e.target.value)} type="text"  value={currentData?.pmtype} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
-              </div>
+              </div> 
               <div class="relative z-0 w-full mb-5 group">
                 <label class="block mb-2 text-sm font-medium text-gray-900">Number</label>
                 <input onChange={(e) => handleFormData('pmumber', e.target.value)} type="text"  value={currentData?.pmumber} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=" " required />
