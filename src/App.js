@@ -68,6 +68,9 @@ function AppContent() {
     setCurrentRouteName(routeName.charAt(0).toUpperCase() + routeName.slice(1));
   };
 
+
+  
+
   useEffect(() => {
     handleRouteChange();
   }, [location.pathname]);
