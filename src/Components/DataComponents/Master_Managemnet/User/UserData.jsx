@@ -6,11 +6,19 @@ import Input from "@mui/joy/Input";
 
 import SearchIcon from "@mui/icons-material/Search";
 
-import { Autocomplete, Modal, ModalDialog, Option, Select, TextField } from "@mui/joy";
+import {
+  Autocomplete,
+  Modal,
+  ModalDialog,
+  Option,
+  Select,
+  TextField,
+} from "@mui/joy";
 import Swal from "sweetalert2";
 import axios from "axios";
 import moment from "moment";
 import SelectBoxWithSearch from "../../../SelectBoxWithSearch";
+import BulkModal from "../../BulkUpload.jsx/BulkModal";
 const UserData = () => {
   const [showModal, setShowModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
@@ -21,6 +29,10 @@ const UserData = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [selectAll, setSelectAll] = useState(false);
   const [loader, setLoader] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
   const limit = 10;
 
   const [cityList, setCityList] = useState([]);
@@ -68,7 +80,6 @@ const UserData = () => {
     getBranch();
   }, []);
 
-
   const [selectedRows, setSelectedRows] = useState([]);
 
   // const getBranch = () => {
@@ -79,8 +90,6 @@ const UserData = () => {
   //     })
   //     .catch((err) => console.log(err));
   // };
-
- 
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -242,6 +251,13 @@ const UserData = () => {
               </button>
             </div>
             <div className="flex gap-3">
+              <button
+                onClick={openModal}
+                type="button"
+                className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center  mb-2"
+              >
+                Upload
+              </button>
               <button
                 onClick={handleCloseModal}
                 type="button"
@@ -737,7 +753,7 @@ const UserData = () => {
                         value={currentData?.branch}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       /> */}
-                     <Autocomplete
+                      <Autocomplete
                         options={BranchData}
                         getOptionLabel={(option) => option.label}
                         renderInput={(params) => (
@@ -867,6 +883,21 @@ const UserData = () => {
               </form>
             </ModalDialog>
           </Modal>
+          {isOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              {/* Modal Content */}
+
+              <div className="bg-gray-200 rounded-lg p-6 w-[80vh]  relative">
+                <button
+                  onClick={closeModal}
+                  className="absolute top-3 text-3xl right-3 text-gray-400 hover:text-gray-600"
+                >
+                  &times;
+                </button>
+                <BulkModal />
+              </div>
+            </div>
+          )}
         </>
       )}
     </>

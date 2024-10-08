@@ -45,6 +45,7 @@ import AdminChecklist from './Components/DataComponents/Admin/AdminChecklist';
 import AdminPM_Master from './Components/DataComponents/Admin/AdminPM_Master';
 import AdminRoles from './Components/DataComponents/Admin/AdminRoles';
 import Login from './Components/Auth/Login';
+import Profile from './Components/Profile/Profile';
 
 export default function App() {
   return (
@@ -188,6 +189,9 @@ function AppContent() {
             <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/user-login" element={<UserLogin />} />
             <Route path="/order-list" element={<OrderTable />} />
+            <Route path="/order-list" element={<OrderTable />} />
+            <Route path="/profile" element={<Profile />} />
+
           </Routes>
         </Box>
       </Box>
