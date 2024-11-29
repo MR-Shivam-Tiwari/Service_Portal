@@ -30,6 +30,7 @@ const UserData = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [loader, setLoader] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -158,9 +159,25 @@ const UserData = () => {
       }
     });
   };
+  const handleSearch = async () => {
+    if (!searchQuery) {
+      return;
+    }
+
+    setLoader(true);
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/collections/search?q=${searchQuery}`);
+      setData(response.data);
+      setLoader(false);
+    } catch (error) {
+      console.error("Error searching users:", error);
+      setLoader(false);
+    }
+  };
 
   const getData = () => {
     setLoader(true);
+    setSearchQuery(""); // Reset search query
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/collections/user?page=${page}&limit=${limit}`
@@ -235,17 +252,19 @@ const UserData = () => {
         <>
           <div className="flex   items-center justify-between gap-3">
             <div className="flex gap-3 justify-center">
-              <FormControl sx={{ flex: 1 }} size="sm">
+            <FormControl sx={{ flex: 1 }} size="sm">
                 <Input
                   size="sm"
                   placeholder="Search"
                   startDecorator={<SearchIcon />}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </FormControl>
               <button
-                onClick={handleCloseModal}
+                onClick={handleSearch}
                 type="button"
-                className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center me-2 mb-2"
+                className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br focus:outline-none font-medium rounded-[3px] text-sm py-1.5 text-center me-2 mb-2"
               >
                 Search
               </button>
@@ -273,16 +292,16 @@ const UserData = () => {
               </button>
             </div>
           </div>
+          <div className="flex justify-end ">
           {selectedRows?.length > 0 && (
-            <div className="flex justify-center">
               <button
                 type="button"
-                class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 :focus:ring-red-800 font-medium rounded-[4px] text-sm px-5 py-2.5 text-center me-2 mb-2"
+                class="text-white bg-blue-700 hover:bg-blue-800  focus:ring-4 focus:outline-none focus:ring-blue-700 :focus:ring-red-800 font-medium rounded-[4px] text-sm px-5 py-2.5 text-center me-2 mb-2"
               >
                 Delete Selected
               </button>
-            </div>
           )}
+          </div>
           <div className="relative w-full overflow-x-auto border ">
             <table className="w-full  border  min-w-max caption-bottom text-sm">
               <thead className="[&amp;_tr]:border-b bg-blue-700 ">

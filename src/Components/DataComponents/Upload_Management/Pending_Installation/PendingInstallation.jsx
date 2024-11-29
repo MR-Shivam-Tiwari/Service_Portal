@@ -23,9 +23,9 @@ function PendingInstallation() {
   const [loader, setLoader] = useState(true);
   const limit = 10;
   const [isOpen, setIsOpen] = useState(false);
-
+  const [searchQuery, setSearchQuery] = useState("");
   const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false)
+  const closeModal = () => setIsOpen(false);
   const [cityList, setCityList] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -111,9 +111,26 @@ function PendingInstallation() {
       }
     });
   };
+  const handleSearch = async () => {
+    if (!searchQuery) {
+      return;
+    }
 
+    setLoader(true);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/collections/pendinginstallationsearch?q=${searchQuery}`
+      );
+      setData(response.data);
+      setLoader(false);
+    } catch (error) {
+      console.error("Error searching users:", error);
+      setLoader(false);
+    }
+  };
   const getData = () => {
     setLoader(true);
+    setSearchQuery("");
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/collections/pendinginstallations?page=${page}&limit=${limit}`
@@ -194,18 +211,20 @@ function PendingInstallation() {
                   size="sm"
                   placeholder="Search"
                   startDecorator={<SearchIcon />}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </FormControl>
               <button
-                onClick={handleCloseModal}
+                onClick={handleSearch}
                 type="button"
-                className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center me-2 mb-2"
+                className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br focus:outline-none font-medium rounded-[3px] text-sm py-1.5 text-center me-2 mb-2"
               >
                 Search
               </button>
             </div>
             <div className="flex gap-3">
-            <button
+              <button
                 onClick={openModal}
                 type="button"
                 className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center  mb-2"

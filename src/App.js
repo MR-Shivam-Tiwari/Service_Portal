@@ -191,7 +191,6 @@ function AppContent() {
             <Route path="/order-list" element={<OrderTable />} />
             <Route path="/order-list" element={<OrderTable />} />
             <Route path="/profile" element={<Profile />} />
-
           </Routes>
         </Box>
       </Box>

@@ -23,7 +23,7 @@ function ReportedProblem() {
   const [loader, setLoader] = useState(true);
   const limit = 10;
   const [isOpen, setIsOpen] = useState(false);
-
+  const [searchQuery, setSearchQuery] = useState("");
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
   const [cityList, setCityList] = useState([]);
@@ -112,8 +112,25 @@ function ReportedProblem() {
     });
   };
 
+  
+  const handleSearch = async () => {
+    if (!searchQuery) {
+      return;
+    }
+
+    setLoader(true);
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/collections/searchreportedproblem?q=${searchQuery}`);
+      setData(response.data);
+      setLoader(false);
+    } catch (error) {
+      console.error("Error searching users:", error);
+      setLoader(false);
+    }
+  };
   const getData = () => {
     setLoader(true);
+    setSearchQuery(""); 
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/collections/reportedproblem?page=${page}&limit=${limit}`
@@ -189,17 +206,19 @@ function ReportedProblem() {
         <>
           <div className="flex items-center justify-between gap-3">
             <div className="flex gap-3 justify-center">
-              <FormControl sx={{ flex: 1 }} size="sm">
+            <FormControl sx={{ flex: 1 }} size="sm">
                 <Input
                   size="sm"
                   placeholder="Search"
                   startDecorator={<SearchIcon />}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </FormControl>
               <button
-                onClick={handleCloseModal}
+                onClick={handleSearch}
                 type="button"
-                className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center me-2 mb-2"
+                className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br focus:outline-none font-medium rounded-[3px] text-sm py-1.5 text-center me-2 mb-2"
               >
                 Search
               </button>
