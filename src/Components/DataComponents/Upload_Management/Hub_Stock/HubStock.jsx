@@ -117,7 +117,9 @@ function HubStock() {
 
     setLoader(true);
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/collections/hubstocksearch?q=${searchQuery}`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/collections/hubstocksearch?q=${searchQuery}`
+      );
       setData(response.data);
       setLoader(false);
     } catch (error) {
@@ -128,7 +130,7 @@ function HubStock() {
 
   const getData = () => {
     setLoader(true);
-    setSearchQuery(""); 
+    setSearchQuery("");
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/collections/hubstocks?page=${page}&limit=${limit}`
@@ -204,7 +206,7 @@ function HubStock() {
         <>
           <div className="flex items-center justify-between gap-3">
             <div className="flex gap-3 justify-center">
-            <FormControl sx={{ flex: 1 }} size="sm">
+              <FormControl sx={{ flex: 1 }} size="sm">
                 <Input
                   size="sm"
                   placeholder="Search"
@@ -409,29 +411,39 @@ function HubStock() {
             }}
           >
             <button
-              className={`border  rounded p-1 ${
+              className={`border rounded p-1 ${
                 page === 1 ? "cursor-not-allowed" : "cursor-pointer"
-              }   w-[100px] hover:bg-gray-300 px-2 bg-gray-100 font-semibold`}
+              } w-[100px] hover:bg-gray-300 px-2 bg-gray-100 font-semibold`}
               onClick={handlePreviousPage}
               disabled={page === 1}
             >
               Previous
             </button>
             <div style={{ display: "flex", gap: "8px" }}>
-              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-                (p) => (
-                  <button
-                    className={`border px-3 rounded ${
-                      p === page ? "bg-blue-700 text-white" : ""
-                    }`}
-                    key={p}
-                    onClick={() => setPage(p)}
-                    disabled={p === page}
-                  >
-                    {p}
-                  </button>
-                )
-              )}
+              {Array.from({ length: totalPages }, (_, index) => index + 1)
+                .filter((p) => {
+                  // Show the first page, last page, and pages around the current page
+                  return (
+                    p === 1 ||
+                    p === totalPages ||
+                    (p >= page - 3 && p <= page + 3)
+                  );
+                })
+                .map((p, i, array) => (
+                  <React.Fragment key={p}>
+                    {/* Add ellipsis for skipped ranges */}
+                    {i > 0 && p !== array[i - 1] + 1 && <span>...</span>}
+                    <button
+                      className={`border px-3 rounded ${
+                        p === page ? "bg-blue-700 text-white" : ""
+                      }`}
+                      onClick={() => setPage(p)}
+                      disabled={p === page}
+                    >
+                      {p}
+                    </button>
+                  </React.Fragment>
+                ))}
             </div>
             <button
               className="border rounded p-1 cursor-pointer hover:bg-blue-500 px-2 bg-blue-700 w-[100px] text-white font-semibold"
@@ -491,7 +503,7 @@ function HubStock() {
                 }}
                 className="thin-scroll"
               >
-                <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[400px] overflow-y-auto">
+                <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[380px] overflow-y-auto">
                   <div class="grid md:grid-cols-2 md:gap-6 w-full">
                     <div className="relative  w-full mb-5 group">
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
@@ -584,7 +596,7 @@ function HubStock() {
                     type="submit"
                     className="text-white bg-blue-700 h-8 hover:bg-blue-800 focus:ring-4  flex items-center px-8 focus:ring-blue-300 font-medium rounded-[4px] text-sm  py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2"
                   >
-                    Save
+                    {editModal ? "Update Hub Stock" : "Create Hub Stock"}
                   </button>
                 </div>
               </form>

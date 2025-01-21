@@ -46,52 +46,68 @@ import AdminPM_Master from './Components/DataComponents/Admin/AdminPM_Master';
 import AdminRoles from './Components/DataComponents/Admin/AdminRoles';
 import Login from './Components/Auth/Login';
 import Profile from './Components/Profile/Profile';
+import PreventiveMaintenance from './Components/DataComponents/Upload_Management/PreventiveMaintenance/PreventiveMaintenance';
+import CheckListType from './Components/DataComponents/Admin/CheckListType';
+import CheckPointType from './Components/DataComponents/Admin/CheckPointType';
 
-export default function App() {
+
+const PrivateRoute = ({ children }) => {
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  return user?.token ? children : <Navigate to="/login" />;
+};
+
+
+const App = () => {
   return (
     <Router>
       <Routes>
+        {/* Redirect root to login if not logged in */}
         <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/*" element={<AppContent />} />
+
+        {/* Login route */}
+        <Route
+          path="/login"
+          element={
+            JSON.parse(localStorage.getItem('user'))?.token ? (
+              <Navigate to="/user" /> // Redirect to dashboard if logged in
+            ) : (
+              <Login />
+            )
+          }
+        />
+
+        {/* Protected routes */}
+        <Route
+          path="/*"
+          element={
+            <PrivateRoute>
+              <AppContent />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );
-}
+};
 
-function AppContent() {
+
+
+const AppContent = () => {
   const [currentRouteName, setCurrentRouteName] = useState('');
   const location = useLocation();
-  const navigate = useNavigate();
-
-  const handleRouteChange = () => {
-    const routeName = location.pathname.split('/').pop().replace(/-/g, ' ');
-    setCurrentRouteName(routeName.charAt(0).toUpperCase() + routeName.slice(1));
-  };
-
-
-  
 
   useEffect(() => {
-    handleRouteChange();
+    const routeName = location.pathname.split('/').pop().replace(/-/g, ' ');
+    setCurrentRouteName(routeName.charAt(0).toUpperCase() + routeName.slice(1));
   }, [location.pathname]);
-
-  const [activeComponent, setActiveComponent] = useState('');
-
-  const handleSidebarItemClick = (componentName) => {
-    setActiveComponent(componentName);
-  };
-
-  const handleItemClick = (route) => {
-    navigate(route);
-  };
 
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
       <Box sx={{ display: 'flex', minHeight: '100dvh' }}>
         <Header />
-        <Sidebar onSidebarItemClick={handleSidebarItemClick} />
+        <Sidebar />
         <Box
           sx={{
             px: { xs: 2, md: 2 },
@@ -109,52 +125,8 @@ function AppContent() {
             gap: 1,
           }}
         >
-          <Box
-            sx={{
-              display: 'flex',
-              mb: 1,
-              gap: 1,
-              flexDirection: { xs: 'column', sm: 'row' },
-              alignItems: { xs: 'start', sm: 'center' },
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Breadcrumbs
-                size="sm"
-                aria-label="breadcrumbs"
-                separator={<ChevronRightRoundedIcon fontSize="sm" />}
-                sx={{ pl: 0 }}
-              >
-                <Link
-                  underline="none"
-                  color="neutral"
-                  href="#some-link"
-                  aria-label="Home"
-                >
-                  <HomeRoundedIcon />
-                </Link>
-                {/* <Link
-                  underline="hover"
-                  color="neutral"
-                  href="#some-link"
-                  fontSize={12}
-                  fontWeight={500}
-                >
-                  Dashboard
-                </Link> */}
-                <Typography color="primary" fontWeight={500} fontSize={12}>
-                  {currentRouteName}
-                </Typography>
-              </Breadcrumbs>
-            </Box>
-            {/* <Typography className='' sx={{ textTransform: 'capitalize' }} level="h3" component="h1">
-              {currentRouteName}
-            </Typography> */}
-          </Box>
-
-          <Routes onChange={handleRouteChange}>
+          {/* Define routes */}
+          <Routes>
             <Route path="/user" element={<UserData />} />
             <Route path="/equipment" element={<Equipment />} />
             <Route path="/product" element={<Product />} />
@@ -191,9 +163,15 @@ function AppContent() {
             <Route path="/order-list" element={<OrderTable />} />
             <Route path="/order-list" element={<OrderTable />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/preventive-maintenance" element={<PreventiveMaintenance />} />
+            <Route path="/checklist-type" element={<CheckListType />} />
+            <Route path="/checkpoint-type" element={<CheckPointType />} />
+            {/* Add other protected routes here */}
           </Routes>
         </Box>
       </Box>
     </CssVarsProvider>
   );
-}
+};
+
+export default App;

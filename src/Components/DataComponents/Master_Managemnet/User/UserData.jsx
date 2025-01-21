@@ -35,16 +35,18 @@ const UserData = () => {
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
   const limit = 10;
-
+  const [state, setstate] = useState([]);
   const [cityList, setCityList] = useState([]);
+  const [country, setCountry] = useState([]);
 
+  // Get All City
   useEffect(() => {
     const getCities = async () => {
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/collections/city`
+          `${process.env.REACT_APP_BASE_URL}/collections/allcity`
         );
-        const cities = res.data.city.map((city) => ({
+        const cities = res.data.map((city) => ({
           label: city.name,
           id: city._id,
           state: city.state,
@@ -58,13 +60,61 @@ const UserData = () => {
 
     getCities();
   }, []);
+
+  // Get All State/Region
+  useEffect(() => {
+    const getState = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/collections/allstate`
+        );
+        const State = res.data.map((state) => ({
+          label: state.name,
+          id: state._id,
+          country: state.country,
+          status: state.status,
+        }));
+        setstate(State);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getState();
+  }, []);
+
+  //Get All country
+  useEffect(() => {
+    const getCountry = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/collections/allCountries`
+        );
+
+        // Map the API response to match Autocomplete's expected format
+        const Country = res.data.map((country) => ({
+          label: country.name,
+          id: country._id,
+          status: country.status,
+        }));
+
+        setCountry(Country);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getCountry();
+  }, []);
+
+  // get All Branch
   useEffect(() => {
     const getBranch = async () => {
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/collections/branch`
+          `${process.env.REACT_APP_BASE_URL}/collections/allbranch`
         );
-        const cities = res.data.branches.map((branches) => ({
+        const cities = res.data.map((branches) => ({
           label: branches.name,
           id: branches._id,
           state: branches.state,
@@ -72,7 +122,7 @@ const UserData = () => {
           city: branches.city,
           branchShortCode: branches.branchShortCode,
         }));
-        setCityList(cities);
+        setBranchData(cities);
       } catch (err) {
         console.error(err);
       }
@@ -82,15 +132,6 @@ const UserData = () => {
   }, []);
 
   const [selectedRows, setSelectedRows] = useState([]);
-
-  // const getBranch = () => {
-  //   axios
-  //     .get(`${process.env.REACT_APP_BASE_URL}/collections/branch`)
-  //     .then((res) => {
-  //       setBranchData(res.data.branches);
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -166,7 +207,9 @@ const UserData = () => {
 
     setLoader(true);
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/collections/search?q=${searchQuery}`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/collections/search?q=${searchQuery}`
+      );
       setData(response.data);
       setLoader(false);
     } catch (error) {
@@ -252,7 +295,7 @@ const UserData = () => {
         <>
           <div className="flex   items-center justify-between gap-3">
             <div className="flex gap-3 justify-center">
-            <FormControl sx={{ flex: 1 }} size="sm">
+              <FormControl sx={{ flex: 1 }} size="sm">
                 <Input
                   size="sm"
                   placeholder="Search"
@@ -293,14 +336,14 @@ const UserData = () => {
             </div>
           </div>
           <div className="flex justify-end ">
-          {selectedRows?.length > 0 && (
+            {selectedRows?.length > 0 && (
               <button
                 type="button"
                 class="text-white bg-blue-700 hover:bg-blue-800  focus:ring-4 focus:outline-none focus:ring-blue-700 :focus:ring-red-800 font-medium rounded-[4px] text-sm px-5 py-2.5 text-center me-2 mb-2"
               >
                 Delete Selected
               </button>
-          )}
+            )}
           </div>
           <div className="relative w-full overflow-x-auto border ">
             <table className="w-full  border  min-w-max caption-bottom text-sm">
@@ -533,29 +576,39 @@ const UserData = () => {
             }}
           >
             <button
-              className={`border  rounded p-1 ${
+              className={`border rounded p-1 ${
                 page === 1 ? "cursor-not-allowed" : "cursor-pointer"
-              }   w-[100px] hover:bg-gray-300 px-2 bg-gray-100 font-semibold`}
+              } w-[100px] hover:bg-gray-300 px-2 bg-gray-100 font-semibold`}
               onClick={handlePreviousPage}
               disabled={page === 1}
             >
               Previous
             </button>
             <div style={{ display: "flex", gap: "8px" }}>
-              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-                (p) => (
-                  <button
-                    className={`border px-3 rounded ${
-                      p === page ? "bg-blue-700 text-white" : ""
-                    }`}
-                    key={p}
-                    onClick={() => setPage(p)}
-                    disabled={p === page}
-                  >
-                    {p}
-                  </button>
-                )
-              )}
+              {Array.from({ length: totalPages }, (_, index) => index + 1)
+                .filter((p) => {
+                  // Show the first page, last page, and pages around the current page
+                  return (
+                    p === 1 ||
+                    p === totalPages ||
+                    (p >= page - 3 && p <= page + 3)
+                  );
+                })
+                .map((p, i, array) => (
+                  <React.Fragment key={p}>
+                    {/* Add ellipsis for skipped ranges */}
+                    {i > 0 && p !== array[i - 1] + 1 && <span>...</span>}
+                    <button
+                      className={`border px-3 rounded ${
+                        p === page ? "bg-blue-700 text-white" : ""
+                      }`}
+                      onClick={() => setPage(p)}
+                      disabled={p === page}
+                    >
+                      {p}
+                    </button>
+                  </React.Fragment>
+                ))}
             </div>
             <button
               className="border rounded p-1 cursor-pointer hover:bg-blue-500 px-2 bg-blue-700 w-[100px] text-white font-semibold"
@@ -574,8 +627,8 @@ const UserData = () => {
           >
             <ModalDialog size="lg" className="p-2  thin-scroll">
               <div className="flex items-start justify-between p-2  px-5 border-solid border-blueGray-200 rounded-t thin-scroll">
-                <h3 className="text-2xl font-semibold">
-                  {editModal ? "Update" : "Create"}
+                <h3 className="text-xl font-semibold">
+                  {editModal ? "Update UserData" : "Create UserData"}
                 </h3>
                 <div
                   onClick={() => handleCloseModal()}
@@ -706,79 +759,91 @@ const UserData = () => {
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
                     </div>
-                    <div className="relative  w-full mb-5 group">
-                      <label class="block mb-2 text-sm font-medium text-gray-900 ">
-                        Country{" "}
+                    <div className="relative w-full mb-5 group">
+                      <label className="block mb-2 text-sm font-medium text-gray-900">
+                        Search Country
                       </label>
-                      {/* <input
-                        type="text"
-                        onChange={(e) =>
-                          handleFormData("country", e.target.value)
-                        }
-                        id="name"
-                        value={currentData?.country}
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      /> */}
-                      {/* <SelectBoxWithSearch
-                        options={cityList} // Pass the entire cityList
-                        placeholder="Select a city"
-                        onSelect={handleSelectCity}
-                      /> */}
+
                       <Autocomplete
-                        options={cityList}
-                        getOptionLabel={(option) => option.label}
+                        className="h-10 w-full"
+                        options={country} // Data from API
+                        getOptionLabel={(option) => option.label} // Display the country name
                         renderInput={(params) => (
-                          <TextField {...params} label="Combo box" />
+                          <TextField
+                            {...params}
+                            name="country"
+                            label="Select Country"
+                          />
                         )}
                         sx={{ width: 300 }}
+                        onChange={(event, value) =>
+                          handleFormData("country", value ? value.label : "")
+                        }
                       />
                     </div>
                     <div className="relative  w-full mb-5 group">
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
                         State/Region{" "}
                       </label>
-                      <input
-                        type="text"
-                        onChange={(e) =>
-                          handleFormData("state", e.target.value)
+
+                      <Autocomplete
+                        className="h-10 w-full"
+                        options={state} // Data from API
+                        getOptionLabel={(option) => option.label} // Display the country name
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="state"
+                            label="Select State"
+                          />
+                        )}
+                        sx={{ width: 300 }}
+                        onChange={(event, value) =>
+                          handleFormData("state", value ? value.label : "")
                         }
-                        id="name"
-                        value={currentData?.state}
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
                     </div>
                     <div className="relative  w-full mb-5 group">
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
-                        City{" "}
+                        Search City{" "}
                       </label>
-                      <input
-                        type="text"
-                        onChange={(e) => handleFormData("city", e.target.value)}
-                        id="name"
-                        value={currentData?.city}
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      <Autocomplete
+                        className="h-10 w-full"
+                        options={cityList} // Data from API
+                        getOptionLabel={(option) => option.label} // Display the country name
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="city"
+                            label="Select City"
+                          />
+                        )}
+                        sx={{ width: 300 }}
+                        onChange={(event, value) =>
+                          handleFormData("city", value ? value.label : "")
+                        }
                       />
                     </div>
                     <div className="relative  w-full mb-5 group">
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
                         Branch{" "}
                       </label>
-                      {/* <input
-                        type="text"
-                        onChange={(e) =>
-                          handleFormData("branch", e.target.value)
-                        }
-                        id="name"
-                        value={currentData?.branch}
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      /> */}
+
                       <Autocomplete
-                        options={BranchData}
-                        getOptionLabel={(option) => option.label}
+                        className="h-10 w-full"
+                        options={BranchData} // Data from API
+                        getOptionLabel={(option) => option.label} // Display the branch name
                         renderInput={(params) => (
-                          <TextField {...params} label="Combo box" />
+                          <TextField
+                            {...params}
+                            name="branch"
+                            label="Select Branch"
+                          />
                         )}
                         sx={{ width: 300 }}
+                        onChange={(event, value) =>
+                          handleFormData("branch", value ? value.label : "")
+                        } // Update form data
                       />
                     </div>
 
@@ -896,7 +961,7 @@ const UserData = () => {
                     type="submit"
                     className="text-white bg-blue-700 h-8 hover:bg-blue-800 focus:ring-4  flex items-center px-8 focus:ring-blue-300 font-medium rounded-[4px] text-sm  py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2"
                   >
-                    Save
+                    {editModal ? "Update User" : "Create User"}
                   </button>
                 </div>
               </form>

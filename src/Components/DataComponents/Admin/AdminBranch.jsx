@@ -7,6 +7,7 @@ import Input from "@mui/joy/Input";
 import SearchIcon from "@mui/icons-material/Search";
 
 import {
+  Autocomplete,
   Box,
   DialogActions,
   DialogContent,
@@ -21,6 +22,7 @@ import {
   ModalDialog,
   Option,
   Select,
+  TextField,
 } from "@mui/joy";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -42,6 +44,7 @@ const AdminBranch = () => {
   const [loader, setLoader] = useState(true);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -71,26 +74,50 @@ const AdminBranch = () => {
     setCurrentData({});
   };
 
-  const getAllStates = () => {
-    axios
-      .get(`${process.env.REACT_APP_BASE_URL}/collections/state`)
-      .then((res) => {
-        setStateList(res.data.states);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  const getAllCitys = () => {
-    axios
-      .get(`${process.env.REACT_APP_BASE_URL}/collections/city`)
-      .then((res) => {
-        setCityList(res.data.city);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  const [state, setstate] = useState([]);
+
+  // Get All City
+  useEffect(() => {
+    const getCities = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/collections/allcity`
+        );
+        const cities = res.data.map((city) => ({
+          label: city.name,
+          id: city._id,
+          state: city.state,
+          status: city.status,
+        }));
+        setCityList(cities);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getCities();
+  }, []);
+  // Get All State/Region
+  useEffect(() => {
+    const getState = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/collections/allstate`
+        );
+        const State = res.data.map((state) => ({
+          label: state.name,
+          id: state._id,
+          country: state.country,
+          status: state.status,
+        }));
+        setstate(State);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getState();
+  }, []);
 
   const handleOpenModal = (country) => {
     setCurrentData(country);
@@ -142,9 +169,26 @@ const AdminBranch = () => {
         console.log(error);
       });
   };
+  const handleSearch = async () => {
+    if (!searchQuery) {
+      return;
+    }
 
+    setLoader(true);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/collections/searchbranch?q=${searchQuery}`
+      );
+      setData(response.data);
+      setLoader(false);
+    } catch (error) {
+      console.error("Error searching users:", error);
+      setLoader(false);
+    }
+  };
   const getAllData = () => {
     setLoader(true);
+    setSearchQuery("");
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/collections/branch?page=${page}&limit=${limit}`
@@ -161,8 +205,6 @@ const AdminBranch = () => {
   };
   useEffect(() => {
     getAllData();
-    getAllStates();
-    getAllCitys();
   }, []);
   useEffect(() => {
     getAllData();
@@ -217,30 +259,38 @@ const AdminBranch = () => {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-5 gap-3">
-            <div className="col-span-3 md:col-span-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex gap-3 justify-center">
               <FormControl sx={{ flex: 1 }} size="sm">
                 <Input
                   size="sm"
                   placeholder="Search"
                   startDecorator={<SearchIcon />}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </FormControl>
+              <button
+                onClick={handleSearch}
+                type="button"
+                className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br focus:outline-none font-medium rounded-[3px] text-sm py-1.5 text-center me-2 mb-2"
+              >
+                Search
+              </button>
             </div>
-            <div className="flex ">
+            <div className="flex gap-3">
               <button
                 onClick={handleCloseModal}
                 type="button"
-                className="text-white  bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2"
+                className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center  mb-2"
               >
                 Create
               </button>
               <button
-                onClick={openModal}
                 type="button"
                 className="text-white w-full col-span-2 px-5 md:col-span-1 bg-blue-700 hover:bg-gradient-to-br  focus:outline-none  font-medium rounded-[3px] text-sm  py-1.5 text-center  mb-2"
               >
-                Upload
+                Filter
               </button>
             </div>
           </div>
@@ -398,27 +448,39 @@ const AdminBranch = () => {
             }}
           >
             <button
-              className="border rounded p-1 cursor-pointer w-[100px] hover:bg-gray-300 px-2 bg-gray-100 font-semibold"
+              className={`border rounded p-1 ${
+                page === 1 ? "cursor-not-allowed" : "cursor-pointer"
+              } w-[100px] hover:bg-gray-300 px-2 bg-gray-100 font-semibold`}
               onClick={handlePreviousPage}
               disabled={page === 1}
             >
               Previous
             </button>
             <div style={{ display: "flex", gap: "8px" }}>
-              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-                (p) => (
-                  <button
-                    className={`border px-3 rounded ${
-                      p === page ? "bg-blue-700 text-white" : ""
-                    }`}
-                    key={p}
-                    onClick={() => setPage(p)}
-                    disabled={p === page}
-                  >
-                    {p}
-                  </button>
-                )
-              )}
+              {Array.from({ length: totalPages }, (_, index) => index + 1)
+                .filter((p) => {
+                  // Show the first page, last page, and pages around the current page
+                  return (
+                    p === 1 ||
+                    p === totalPages ||
+                    (p >= page - 3 && p <= page + 3)
+                  );
+                })
+                .map((p, i, array) => (
+                  <React.Fragment key={p}>
+                    {/* Add ellipsis for skipped ranges */}
+                    {i > 0 && p !== array[i - 1] + 1 && <span>...</span>}
+                    <button
+                      className={`border px-3 rounded ${
+                        p === page ? "bg-blue-700 text-white" : ""
+                      }`}
+                      onClick={() => setPage(p)}
+                      disabled={p === page}
+                    >
+                      {p}
+                    </button>
+                  </React.Fragment>
+                ))}
             </div>
             <button
               className="border rounded p-1 cursor-pointer hover:bg-blue-500 px-2 bg-blue-700 w-[100px] text-white font-semibold"
@@ -428,6 +490,7 @@ const AdminBranch = () => {
               Next
             </button>
           </div>
+
           {isOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
               {/* Modal Content */}
@@ -450,10 +513,25 @@ const AdminBranch = () => {
             size="lg"
           >
             <ModalDialog size="lg" className="p-2 ">
-              <div className="flex items-start justify-between p-2 border-b border-solid border-blueGray-200 rounded-t">
-                <h3 className="text-3xl font-semibold">
-                  {editModal ? "Update " : "Create "}
+              <div className="flex items-start justify-between p-2  px-5 border-solid border-blueGray-200 rounded-t thin-scroll">
+                <h3 className="text-2xl font-semibold">
+                  {editModal ? "Update Branch" : "Create Branch"}
                 </h3>
+                <div
+                  onClick={() => handleCloseModal()}
+                  className=" border p-2 rounded-[4px] hover:bg-gray-200 cursor-pointer "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                    className="bi bi-x-lg font-semibold "
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                  </svg>
+                </div>
               </div>
 
               <form
@@ -463,7 +541,7 @@ const AdminBranch = () => {
                 }}
                 className=""
               >
-                <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[400px] overflow-y-auto">
+                <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[380px] overflow-y-auto">
                   <div class="relative z-0 w-full mb-5 group">
                     <label class="block mb-2 text-sm font-medium text-gray-900">
                       Branch Name
@@ -520,35 +598,44 @@ const AdminBranch = () => {
                       <label class="block mb-2 text-sm font-medium text-gray-900">
                         Select State
                       </label>
-
-                      <Select
-                        variant="soft"
-                        className="rounded-[4px] py-2 border"
-                        defaultValue={currentData?.state || ""}
-                        onChange={(e, value) => handleFormData("state", value)}
-                      >
-                        <Option value="">Select State</Option>
-                        {stateList?.map((i) => (
-                          <Option value={i?.name}>{i?.name}</Option>
-                        ))}
-                      </Select>
+                      <Autocomplete
+                        className="h-10 w-full"
+                        options={state} // Data from API
+                        getOptionLabel={(option) => option.label} // Display the country name
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="state"
+                            label="region State"
+                          />
+                        )}
+                        sx={{ width: 300 }}
+                        onChange={(event, value) =>
+                          handleFormData("state", value ? value.label : "")
+                        }
+                      />
                     </div>
                     <div>
                       <label class="block mb-2 text-sm font-medium text-gray-900">
                         Select City
                       </label>
 
-                      <Select
-                        variant="soft"
-                        className="rounded-[4px] py-2 border"
-                        defaultValue={currentData?.city || ""}
-                        onChange={(e, value) => handleFormData("city", value)}
-                      >
-                        <Option value="">Select City</Option>
-                        {cityList?.map((i) => (
-                          <Option value={i?.name}>{i?.name}</Option>
-                        ))}
-                      </Select>
+                      <Autocomplete
+                        className="h-10 w-full"
+                        options={cityList} // Data from API
+                        getOptionLabel={(option) => option.label} // Display the country name
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="city"
+                            label="region City"
+                          />
+                        )}
+                        sx={{ width: 300 }}
+                        onChange={(event, value) =>
+                          handleFormData("city", value ? value.label : "")
+                        }
+                      />
                     </div>
                   </div>
                 </div>
@@ -566,7 +653,7 @@ const AdminBranch = () => {
                     type="submit"
                     className="text-white bg-blue-700 h-8 hover:bg-blue-800 focus:ring-4  flex items-center px-8 focus:ring-blue-300 font-medium rounded-[4px] text-sm  py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2"
                   >
-                    Save Country
+                    {editModal ? "Update Branch" : "Create Branch"}
                   </button>
                 </div>
               </form>

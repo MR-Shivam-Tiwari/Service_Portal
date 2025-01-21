@@ -6,11 +6,12 @@ import Input from "@mui/joy/Input";
 
 import SearchIcon from "@mui/icons-material/Search";
 
-import { Modal, ModalDialog, Option, Select } from "@mui/joy";
+import { Modal, ModalDialog, Option, Select, TextField } from "@mui/joy";
 import Swal from "sweetalert2";
 import axios from "axios";
 import moment from "moment";
 import BulkModal from "../../BulkUpload.jsx/BulkModal";
+import { Autocomplete } from "@mui/joy";
 
 function Customer() {
   const [showModal, setShowModal] = useState(false);
@@ -26,20 +27,99 @@ function Customer() {
   const [searchQuery, setSearchQuery] = useState("");
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
-  const [cityList, setCityList] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
 
-  const getCities = () => {
-    axios
-      .get(`${process.env.REACT_APP_BASE_URL}/collections/city`)
-      .then((res) => {
-        setCityList(res.data.city);
-      })
-      .catch((err) => console.log(err));
-  };
+  const [BranchData, setBranchData] = useState([]);
+  const [state, setstate] = useState([]);
+  const [country, setCountry] = useState([]);
+  const [cityList, setCityList] = useState([]);
 
+  // Get All City
   useEffect(() => {
+    const getCities = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/collections/allcity`
+        );
+        const cities = res.data.map((city) => ({
+          label: city.name,
+          id: city._id,
+          state: city.state,
+          status: city.status,
+        }));
+        setCityList(cities);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     getCities();
+  }, []);
+  // Get All State/Region
+  useEffect(() => {
+    const getState = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/collections/allstate`
+        );
+        const State = res.data.map((state) => ({
+          label: state.name,
+          id: state._id,
+          country: state.country,
+          status: state.status,
+        }));
+        setstate(State);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getState();
+  }, []);
+  //Get All country
+  useEffect(() => {
+    const getCountry = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/collections/allCountries`
+        );
+
+        // Map the API response to match Autocomplete's expected format
+        const Country = res.data.map((country) => ({
+          label: country.name,
+          id: country._id,
+          status: country.status,
+        }));
+
+        setCountry(Country);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getCountry();
+  }, []);
+  useEffect(() => {
+    const getBranch = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/collections/allbranch`
+        );
+        const cities = res.data.map((branches) => ({
+          label: branches.name,
+          id: branches._id,
+          state: branches.state,
+          status: branches.status,
+          city: branches.city,
+          branchShortCode: branches.branchShortCode,
+        }));
+        setBranchData(cities);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getBranch();
   }, []);
 
   const handleSelectAll = () => {
@@ -472,29 +552,39 @@ function Customer() {
             }}
           >
             <button
-              className={`border  rounded p-1 ${
+              className={`border rounded p-1 ${
                 page === 1 ? "cursor-not-allowed" : "cursor-pointer"
-              }   w-[100px] hover:bg-gray-300 px-2 bg-gray-100 font-semibold`}
+              } w-[100px] hover:bg-gray-300 px-2 bg-gray-100 font-semibold`}
               onClick={handlePreviousPage}
               disabled={page === 1}
             >
               Previous
             </button>
             <div style={{ display: "flex", gap: "8px" }}>
-              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-                (p) => (
-                  <button
-                    className={`border px-3 rounded ${
-                      p === page ? "bg-blue-700 text-white" : ""
-                    }`}
-                    key={p}
-                    onClick={() => setPage(p)}
-                    disabled={p === page}
-                  >
-                    {p}
-                  </button>
-                )
-              )}
+              {Array.from({ length: totalPages }, (_, index) => index + 1)
+                .filter((p) => {
+                  // Show the first page, last page, and pages around the current page
+                  return (
+                    p === 1 ||
+                    p === totalPages ||
+                    (p >= page - 3 && p <= page + 3)
+                  );
+                })
+                .map((p, i, array) => (
+                  <React.Fragment key={p}>
+                    {/* Add ellipsis for skipped ranges */}
+                    {i > 0 && p !== array[i - 1] + 1 && <span>...</span>}
+                    <button
+                      className={`border px-3 rounded ${
+                        p === page ? "bg-blue-700 text-white" : ""
+                      }`}
+                      onClick={() => setPage(p)}
+                      disabled={p === page}
+                    >
+                      {p}
+                    </button>
+                  </React.Fragment>
+                ))}
             </div>
             <button
               className="border rounded p-1 cursor-pointer hover:bg-blue-500 px-2 bg-blue-700 w-[100px] text-white font-semibold"
@@ -513,8 +603,8 @@ function Customer() {
           >
             <ModalDialog size="lg" className="p-2  thin-scroll">
               <div className="flex items-start justify-between p-2 border-b px-5 border-solid border-blueGray-200 rounded-t thin-scroll">
-                <h3 className="text-2xl font-semibold">
-                  {editModal ? "Update" : "Create"}
+                <h3 className="text-xl font-semibold">
+                  {editModal ? "Update Customer" : "Create Customer"}
                 </h3>
                 <div
                   onClick={() => handleCloseModal()}
@@ -540,7 +630,7 @@ function Customer() {
                 }}
                 className="thin-scroll"
               >
-                <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[400px] overflow-y-auto">
+                <div className=" w-[300px] md:w-[500px] lg:w-[700px] border-b border-solid border-blueGray-200 p-3 flex-auto max-h-[380px] overflow-y-auto">
                   <div class="grid md:grid-cols-2 md:gap-6 w-full">
                     <div className="relative  w-full mb-5 group">
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
@@ -604,17 +694,22 @@ function Customer() {
                       <label class="block mb-2  text-sm font-medium text-gray-900 ">
                         City{" "}
                       </label>
-                      <Select
-                        variant="soft"
-                        className="rounded-[4px] py-2 border"
-                        defaultValue={currentData?.city || ""}
-                        onChange={(e, value) => handleFormData("city", value)}
-                      >
-                        <Option value="">Select</Option>
-                        {cityList.map((item) => (
-                          <Option value={item?.name}>{item?.name}</Option>
-                        ))}
-                      </Select>
+                      <Autocomplete
+                        className="h-10 w-full"
+                        options={cityList} // Data from API
+                        getOptionLabel={(option) => option.label} // Display the country name
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="city"
+                            label="Select City"
+                          />
+                        )}
+                        sx={{ width: 300 }}
+                        onChange={(event, value) =>
+                          handleFormData("city", value ? value.label : "")
+                        }
+                      />
                     </div>
                     <div className="relative  w-full mb-5 group">
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
@@ -648,28 +743,42 @@ function Customer() {
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
                         Region{" "}
                       </label>
-                      <input
-                        type="text"
-                        onChange={(e) =>
-                          handleFormData("district", e.target.value)
+                      <Autocomplete
+                        className="h-10 w-full"
+                        options={state} // Data from API
+                        getOptionLabel={(option) => option.label} // Display the country name
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="region"
+                            label="region State"
+                          />
+                        )}
+                        sx={{ width: 300 }}
+                        onChange={(event, value) =>
+                          handleFormData("region", value ? value.label : "")
                         }
-                        id="name"
-                        value={currentData?.district}
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
                     </div>
                     <div className="relative  w-full mb-5 group">
                       <label class="block mb-2 text-sm font-medium text-gray-900 ">
                         Country{" "}
                       </label>
-                      <input
-                        type="text"
-                        onChange={(e) =>
-                          handleFormData("district", e.target.value)
+                      <Autocomplete
+                        className="h-10 w-full"
+                        options={country} // Data from API
+                        getOptionLabel={(option) => option.label} // Display the country name
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="country"
+                            label="Select country"
+                          />
+                        )}
+                        sx={{ width: 300 }}
+                        onChange={(event, value) =>
+                          handleFormData("country", value ? value.label : "")
                         }
-                        id="name"
-                        value={currentData?.district}
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
                     </div>
                     <div className="relative  w-full mb-5 group">
@@ -775,7 +884,7 @@ function Customer() {
                     type="submit"
                     className="text-white bg-blue-700 h-8 hover:bg-blue-800 focus:ring-4  flex items-center px-8 focus:ring-blue-300 font-medium rounded-[4px] text-sm  py-2.5 me-2 mb-2 :bg-blue-600 :hover:bg-blue-700 focus:outline-none :focus:ring-blue-800 me-2 mb-2"
                   >
-                    Save
+                    {editModal ? "Update Customer" : "Create Customer"}
                   </button>
                 </div>
               </form>

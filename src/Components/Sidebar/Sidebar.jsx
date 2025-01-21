@@ -21,6 +21,7 @@ import SummarizeIcon from "@mui/icons-material/Summarize";
 // import ColorSchemeToggle from '../ColorToggle/ColorSchemeToggle';
 import { closeSidebar } from "./utils";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Button, Modal } from "@mui/joy";
 
 function Toggler({ defaultExpanded = false, renderToggle, children }) {
   const [open, setOpen] = useState(defaultExpanded);
@@ -47,6 +48,20 @@ export default function Sidebar({ onSidebarItemClick }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedItem, setSelectedItem] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user")) || {};
+
+  // Check if image exists in localStorage, otherwise use a default image
+  const avatarImage =
+    user?.image ||
+    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286";
+  const userName = user?.name || "Default Name"; // Fallback to "Default Name" if not available
+  const userId = user?.employeeId || "Default ID"; // Fallback to "Default ID" if not available
+  const userRole = user?.roleName || "User";
+  const handleLogout = () => {
+    localStorage.removeItem("user"); // Clear user data from localStorage
+    window.location.reload(); // Refresh the page or navigate to login page
+  };
 
   useEffect(() => {
     // Set the selected item based on the current route
@@ -269,6 +284,19 @@ export default function Sidebar({ onSidebarItemClick }) {
                     Dealer
                   </ListItemButton>
                 </ListItem>
+                <ListItem
+                  nested
+                  onClick={() => {
+                    navigate("/admin-checklist");
+                    handleItemClick("/admin-checklist");
+                  }}
+                >
+                  <ListItemButton
+                    selected={selectedItem === "/admin-checklist"}
+                  >
+                    Checklist
+                  </ListItemButton>
+                </ListItem>
               </List>
             </Toggler>
           </ListItem>
@@ -388,6 +416,19 @@ export default function Sidebar({ onSidebarItemClick }) {
                     Pending Complaint
                   </ListItemButton>
                 </ListItem>
+                <ListItem
+                  nested
+                  onClick={() => {
+                    navigate("/preventive-maintenance");
+                    handleItemClick("/preventive-maintenance");
+                  }}
+                >
+                  <ListItemButton
+                    selected={selectedItem === "/preventive-maintenance"}
+                  >
+                    Preventive Maintenance
+                  </ListItemButton>
+                </ListItem>
               </List>
             </Toggler>
           </ListItem>
@@ -464,6 +505,31 @@ export default function Sidebar({ onSidebarItemClick }) {
                 <ListItem
                   nested
                   onClick={() => {
+                    navigate("/checklist-type");
+                    handleItemClick("/checklist-type");
+                  }}
+                >
+                  <ListItemButton selected={selectedItem === "/checklist-type"}>
+                    CheckListType
+                  </ListItemButton>
+                </ListItem>
+                <ListItem
+                  nested
+                  onClick={() => {
+                    navigate("/checkpoint-type");
+                    handleItemClick("/checkpoint-type");
+                  }}
+                >
+                  <ListItemButton
+                    selected={selectedItem === "/checkpoint-type"}
+                  >
+                    CheckPointType
+                  </ListItemButton>
+                </ListItem>
+
+                <ListItem
+                  nested
+                  onClick={() => {
                     navigate("/admin-branch");
                     handleItemClick("/admin-branch");
                   }}
@@ -522,19 +588,7 @@ export default function Sidebar({ onSidebarItemClick }) {
                     Product Group
                   </ListItemButton>
                 </ListItem>
-                <ListItem
-                  nested
-                  onClick={() => {
-                    navigate("/admin-checklist");
-                    handleItemClick("/admin-checklist");
-                  }}
-                >
-                  <ListItemButton
-                    selected={selectedItem === "/admin-checklist"}
-                  >
-                    Checklist
-                  </ListItemButton>
-                </ListItem>
+
                 <ListItem
                   nested
                   onClick={() => {
@@ -552,7 +606,7 @@ export default function Sidebar({ onSidebarItemClick }) {
             </Toggler>
           </ListItem>
         </List>
-        <List
+        {/* <List
           size="sm"
           className="mx-1"
           sx={{
@@ -665,7 +719,7 @@ export default function Sidebar({ onSidebarItemClick }) {
               </List>
             </Toggler>
           </ListItem>
-        </List>
+        </List> */}
         {/* <List
           size="sm"
           sx={{
@@ -974,25 +1028,25 @@ export default function Sidebar({ onSidebarItemClick }) {
             </Toggler>
           </ListItem>
         </List>
-        <div className="flex my-3 border mx-1 bg-gray-100  gap-1 items-center  rounded pl-1  py-1">
+        <div className="flex my-3 border mx-1 bg-gray-100 gap-1 items-center rounded pl-1 py-1">
           <Avatar
             variant="outlined"
             size="sm"
-            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
+            src={avatarImage} // Dynamically set avatar image
           />
           <Box sx={{ minWidth: 0, flex: 1 }}>
             <Typography level="title-sm" className="text-xs font-bold">
-              Siriwat K.
+              {userName}
             </Typography>
-            <div className="flex gap-2  mt-1 ">
+            <div className="flex gap-2 mt-1">
               <Typography level="body-xs" className="text-xs font-bold">
-                Id - 9834874
+                Id - {userId}
               </Typography>
               <Typography
                 level="body-xs"
                 className="text-xs border px-1 bg-yellow-500 rounded-[3px] text-black font-bold"
               >
-                Super Admin
+                {userRole}
               </Typography>
             </div>
           </Box>
@@ -1000,15 +1054,50 @@ export default function Sidebar({ onSidebarItemClick }) {
         <div className="mx-1">
           <IconButton
             size="sm"
-            style={{}}
-            className="flex gap-5 mb-3 h-10   text-lg items-center mt-5 justify-between px-3 bg-gray-200 w-full"
+            className="flex gap-5 mb-3 h-10 text-lg items-center mt-5 justify-between px-3 bg-gray-200 w-full"
             variant="plain"
             color="neutral"
+            onClick={() => setIsModalOpen(true)} // Open the modal
           >
             LogOut <LogoutRoundedIcon />
           </IconButton>
+
+          {/* Logout confirmation modal */}
+          <LogoutModal
+            open={isModalOpen}
+            onClose={() => setIsModalOpen(false)} // Close modal without logging out
+            onConfirm={handleLogout} // Confirm and logout
+          />
         </div>
       </Box>
     </Sheet>
   );
 }
+
+const LogoutModal = ({ open, onClose, onConfirm }) => {
+  return (
+    <Modal open={open} onClose={onClose}>
+      <div
+        className="p-5 bg-white rounded-md shadow-lg w-80"
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+        }}
+      >
+        <h2 className="text-xl font-semibold mb-4">Confirm Logout</h2>
+        <p className="mb-6">Are you sure you want to log out?</p>
+        <div className="flex justify-end gap-4">
+          <Button variant="plain" color="neutral" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button variant="solid" color="danger" onClick={onConfirm}>
+            Log Out
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  );
+};
